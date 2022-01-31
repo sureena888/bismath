@@ -17,15 +17,15 @@ Bismath features
 
 ## Examples
 
-# Hello World Function {
+# Hello World Function 
 
-# equals("Hello, World)
+ equals("Hello, World)
 
-}
+
 
 # Fibonnaci
 
-# function integer fibonnaci(integer num){{
+ function integer fibonnaci(integer num){{
 
     does num == 0?
         make 0
