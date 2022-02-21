@@ -1,0 +1,71 @@
+Bismath {
+
+  Program     = Block* 
+  Block       = newline* Statement+ newline*
+	
+  Statement   = MathStmt newline                                --simple
+                | Loop
+                | Conditional
+                | Function
+  
+  Suite       = ":" MathStmt newline                            -- small
+                | ":" newline Statement+              -- complex
+                
+  MathStmt  = declare id "=" Exp							-assignment
+                | "put" "(" Exp ")"                           -- print					
+                | output Exp?                               -- return
+                | getout                                     -- break
+                | Exp
+
+  Exp       = ("-" | "!") Exp7                        -- unary
+            | Exp1 "?" Exp1 ":" Exp                   -- ternary
+            | Exp1
+  Exp1      = Exp1 "||" Exp2                          -- binary
+            | Exp2
+  Exp2      = Exp2 "&&" Exp3                          -- binary
+            | Exp3
+  Exp3      = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4 -- binary
+            | Exp4
+  Exp4      = Exp4 ("+" | "-") Exp5                   -- binary
+            | Exp5
+  Exp5      = Exp5 ("*" | "/" | "%") Exp6             -- binary
+            | Exp6
+  Exp6      = Exp7 "**" Exp6                          -- binary
+            | Exp7
+  Exp7      = num
+            | true
+            | false
+            | Call
+            | id
+            | "(" Exp ")"                             -- parens
+  
+  Loop      = for Type id in Exp                        -- for
+            | while Exp Suite                                   -- while
+  Conditional = ifconditional Exp Suite
+             (otherwise Exp Suite)*						-- if
+  
+  Function    = function Type id "(" Params ")" Suite
+
+  Call      = id "(" Args ")"
+  Params    = ListOf<id, ",">
+  Args      = ListOf<Exp, ",">
+
+  declare   = "declare" ~idchar
+  function  = "function" ~idchar
+  for 		= "for" ~ idchar
+  while     = "while" ~idchar
+  true      = "true" ~idchar
+  false     = "false" ~idchar
+  put       = "put" ~idchar
+  getout    = "getout" ~idchar
+  ifconditional = "ifconditional" ~idchar
+  otherwise = "otherwise" ~idchar
+  output    = "output" ~idchar
+  keyword   = declare | function | while | true | false | put | getout | ifconditional 
+  			| otherwise | output | for
+  num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  id        = ~keyword letter idchar*
+  idchar    = letter | digit | "_"
+  space    += "//" (~"\n" any)* ("\n" | end)          -- comment
+  newline     = "\n"+
+}
