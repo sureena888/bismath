@@ -39,6 +39,8 @@ Bismath {
             | id       
             | "(" Exp ")"                                    -- parens
          
+   Type     = "int" | "bool" | "str"
+
   Loop      = for Type id in Exp                             -- for
             | while Exp Suite                                -- while
   Conditional = ifconditional Exp Suite       
@@ -50,9 +52,10 @@ Bismath {
   Params    = ListOf<id, ",">
   Args      = ListOf<Exp, ",">
 
+  in     	  = "in"  ~idchar
   declare   = "declare" ~idchar
   function  = "function" ~idchar
-  for 		= "for" ~ idchar
+  for 	  	= "for" ~ idchar
   while     = "while" ~idchar
   true      = "true" ~idchar
   false     = "false" ~idchar
