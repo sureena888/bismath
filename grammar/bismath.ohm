@@ -1,18 +1,19 @@
 Bismath {
 
   Program     = Block* 
-  Block       = newline* Statement+ newline*
+  Block       = Statement+
 	
-  Statement   = MathStmt newline                             -- simple
+  Statement   = MathStmt                             -- simple
                 | Loop       
                 | Conditional       
                 | Function       
          
-  Suite       = ":" MathStmt newline                         -- small
-                | ":" newline Statement+                     -- complex
+  Suite       = "=" Statement                         -- small
+                | "="  Statement+                     -- complex
                        
   MathStmt  = declare id "=" Exp							               -- assignment
-                | "put" "(" Exp ")"                          -- print					
+  				| id "=" Exp                          	 -- assign
+  				| "put" "(" Exp ")"                          -- print					
                 | output Exp?                                -- return
                 | getout                                     -- break
                 | Exp       
@@ -42,11 +43,11 @@ Bismath {
    Type     = "int" | "bool" | "str"
 
   Loop      = for Type id in Exp                             -- for
-            | while Exp Suite                                -- while
+            | while Exp "{" Statement* "}"                     -- while
   Conditional = ifconditional Exp Suite       
              (otherwise Exp Suite)*						               -- if
   
-  Function    = function Type id "(" Params ")" Suite
+  Function    = function id "(" Params ")" Suite
 
   Call      = id "(" Args ")"
   Params    = ListOf<id, ",">
