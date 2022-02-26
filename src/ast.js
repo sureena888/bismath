@@ -2,34 +2,41 @@ import fs from "fs"
 import ohm from "ohm-js"
 import * as core from "./core.js"
 
-const bellaGrammar = ohm.grammar(fs.readFileSync("src/bella.ohm"))
+const bismathGrammar = ohm.grammar(fs.readFileSync("src/bismath.ohm"))
 
-const astBuilder = bellaGrammar.createSemantics().addOperation("ast", {
+const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new core.Program(body.ast())
   },
-  Statement_vardec(_let, id, _eq, initializer, _semicolon) {
-    return new core.VariableDeclaration(id.ast(), initializer.ast())
-  },
-  Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
-    return new core.FunctionDeclaration(
-      id.ast(),
-      params.asIteration().ast(),
-      body.ast()
-    )
-  },
-  Statement_assign(id, _eq, expression, _semicolon) {
-    return new core.Assignment(id.ast(), expression.ast())
-  },
-  Statement_print(_print, argument, _semicolon) {
-    return new core.PrintStatement(argument.ast())
-  },
-  Statement_while(_while, test, body) {
-    return new core.WhileStatement(test.ast(), body.ast())
-  },
-  Block(_open, body, _close) {
+  Block(body) {
     return body.ast()
   },
+  Statement(body) {
+    return body.ast()
+  },
+  MathStmt_assignment(_declare, id, _eq, initializer) {
+    return new core.VariableDeclaration(id.ast(), initializer.ast())
+  },
+  MathStmt_assign(id, _eq, expression) {
+    return new core.Assignment(id.ast(), expression.ast())
+  },
+  MathStmt_print(_put, argument) {
+    return new core.PrintStatement(argument.ast())
+  },
+  MathStmt_return(_output, argument) {
+    return new core.PrintStatement(argument.ast())
+  },
+
+  // Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
+  //   return new core.FunctionDeclaration(
+  //     id.ast(),
+  //     params.asIteration().ast(),
+  //     body.ast()
+  //   )
+  // },
+  // Statement_while(_while, test, body) {
+  //   return new core.WhileStatement(test.ast(), body.ast())
+  // },
   Exp_unary(op, operand) {
     return new core.UnaryExpression(op.ast(), operand.ast())
   },
@@ -81,7 +88,7 @@ const astBuilder = bellaGrammar.createSemantics().addOperation("ast", {
 })
 
 export default function ast(sourceCode) {
-  const match = bellaGrammar.match(sourceCode)
+  const match = bismathGrammar.match(sourceCode)
   if (!match.succeeded()) core.error(match.message)
   return astBuilder(match).ast()
 }

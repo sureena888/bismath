@@ -12,8 +12,8 @@ Bismath {
                 | "="  Statement+                     -- complex
                        
   MathStmt  = declare id "=" Exp							               -- assignment
-  				| id "=" Exp                          	 -- assign
-  				| "put" "(" Exp ")"                          -- print					
+  				      | id "=" Exp                              	 -- assign
+  				      | put Exp                                    -- print					
                 | output Exp?                                -- return
                 | getout                                     -- break
                 | Exp       

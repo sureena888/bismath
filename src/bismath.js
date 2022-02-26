@@ -6,7 +6,7 @@ import compile from "./compiler.js"
 
 const help = `Bismath compiler
 
-Syntax: node bella.js <filename> <outputType>
+Syntax: node bismath.js <filename> <outputType>
 
 Prints to stdout according to <outputType>, which must be one of:
 
