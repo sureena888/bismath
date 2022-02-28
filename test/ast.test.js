@@ -2,18 +2,18 @@ import assert from "assert/strict"
 import util from "util"
 import ast from "../src/ast.js"
 
-const source = `let x=sqrt(9);function f(x)=3*x;while(true){x=3;print(0?f(x):2);}`
+const source = `declare b = 5 + (7-9) * (4+1)`
 
-const expected = `   1 | Program statements=[#2,#4,#6]
-   2 | VariableDeclaration variable=(Id,"x") initializer=#3
-   3 | Call callee=(Id,"sqrt") args=[(Num,"9")]
-   4 | FunctionDeclaration fun=(Id,"f") params=[(Id,"x")] body=#5
-   5 | BinaryExpression op=(Sym,"*") left=(Num,"3") right=(Id,"x")
-   6 | WhileStatement test=(Bool,"true") body=[#7,#8]
-   7 | Assignment target=(Id,"x") source=(Num,"3")
-   8 | PrintStatement argument=#9
-   9 | Conditional test=(Num,"0") consequent=#10 alternate=(Num,"2")
-  10 | Call callee=(Id,"f") args=[(Id,"x")]`
+const expected = `   1 | Program statements=[#2]
+   2 | Program statements = [#2]
+   3 | Array 0=#3 1=#8 2=#10
+   4 | BinaryExpression op=(Sym,"+") left=(Num,"5") right=#5
+   5 | BinaryExpression op=(Sym,"*") left=#6 right=#7
+   6 | BinaryExpression op=(Sym,"-") left=(Num,"7") right=(Num,"9")
+   7 | BinaryExpression op=(Sym,"+") left=(Num,"4") right=(Num,"1")
+   8 | VariableDeclaration variable=(Id,"a") initializer=#9
+   9 | BinaryExpression op=(Sym,"+") left=(Num,"2") right=(Num,"4")
+  10 | PrintStatement argument=[(Id,"a")]`
 
 describe("The AST generator", () => {
   it("produces the expected AST for all node types", () => {
