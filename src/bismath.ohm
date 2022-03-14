@@ -37,7 +37,8 @@ Bismath {
             | true       
             | false       
             | Call       
-            | id       
+            | id
+            | Array       
             | "(" Exp ")"                                    -- parens
          
    Type     = "int" | "bool" | "str"
@@ -52,6 +53,8 @@ Bismath {
   Call      = id "(" Args ")"
   Params    = ListOf<id, ",">
   Args      = ListOf<Exp, ",">
+
+  Array     = "[" ListOf<Exp, ","> "]"
 
   in     	  = "in"  ~idchar
   declare   = "declare" ~idchar
