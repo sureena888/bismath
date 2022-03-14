@@ -16,6 +16,7 @@ class Context {
     this.parent = parent
     this.locals = new Map()
   }
+
   add(name, entity) {
     if (this.locals.has(name)) {
       error(`The identifier ${name} has already been declared`)
@@ -23,6 +24,7 @@ class Context {
     this.locals.set(name, entity)
     return entity
   }
+
   get(token, expectedType) {
     let entity
     for (let context = this; context; context = context.parent) {
@@ -35,12 +37,15 @@ class Context {
     }
     return entity
   }
+
   analyze(node) {
     return this[node.constructor.name](node)
   }
+
   Program(p) {
     this.analyze(p.statements)
   }
+
   VariableDeclaration(d) {
     // Analyze the initializer *before* adding the variable to the context,
     // because we don't want the variable to come into scope until after
@@ -50,6 +55,7 @@ class Context {
     d.variable.value = new Variable(d.variable.lexeme, false)
     this.add(d.variable.lexeme, d.variable.value)
   }
+
   FunctionDeclaration(d) {
     // Add the function to the context before analyzing the body, because
     // we want to allow functions to be recursive
@@ -63,6 +69,7 @@ class Context {
     }
     newContext.analyze(d.body)
   }
+
   Assignment(s) {
     this.analyze(s.source)
     this.analyze(s.target)
@@ -70,13 +77,16 @@ class Context {
       error(`The identifier ${s.target.lexeme} is read only`, s.target)
     }
   }
+
   WhileStatement(s) {
     this.analyze(s.test)
     this.analyze(s.body)
   }
+
   PrintStatement(s) {
     this.analyze(s.argument)
   }
+
   Call(c) {
     this.analyze(c.args)
     c.callee.value = this.get(c.callee, Function)
@@ -88,18 +98,22 @@ class Context {
       )
     }
   }
+
   Conditional(c) {
     this.analyze(c.test)
     this.analyze(c.consequent)
     this.analyze(c.alternate)
   }
+
   BinaryExpression(e) {
     this.analyze(e.left)
     this.analyze(e.right)
   }
+
   UnaryExpression(e) {
     this.analyze(e.operand)
   }
+
   Token(t) {
     // Shortcut: only handle ids that are variables, not functions, here.
     // We will handle the ids in function calls in the Call() handler. This
@@ -109,6 +123,7 @@ class Context {
     if (t.category === "Num") t.value = Number(t.lexeme)
     if (t.category === "Bool") t.value = t.lexeme === "true"
   }
+
   Array(a) {
     a.forEach((item) => this.analyze(item))
   }

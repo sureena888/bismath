@@ -26,7 +26,7 @@ Bismath {
   Exp2      = Exp2 "&&" Exp3                                 -- binary
             | Exp3       
   Exp3      = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4        -- binary
-            | Exp4       
+            | Exp4
   Exp4      = Exp4 ("+" | "-") Exp5                          -- binary
             | Exp5       
   Exp5      = Exp5 ("*" | "/" | "%") Exp6                    -- binary
@@ -38,7 +38,8 @@ Bismath {
             | false       
             | Call       
             | id
-            | Array       
+            | Array
+            | Matrix       
             | "(" Exp ")"                                    -- parens
          
    Type     = "int" | "bool" | "str"
@@ -55,6 +56,7 @@ Bismath {
   Args      = ListOf<Exp, ",">
 
   Array     = "[" ListOf<Exp, ","> "]"
+  Matrix    =  "{" ListOf<Exp, " "> "}"
 
   in     	  = "in"  ~idchar
   declare   = "declare" ~idchar
