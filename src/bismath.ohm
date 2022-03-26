@@ -42,7 +42,7 @@ Bismath {
             | Matrix       
             | "(" Exp ")"                                    -- parens
          
-   Type     = "int" | "bool" | "str"
+  Type     = "int" | "bool" | "str"
 
   Loop      = for Type id in Exp                             -- for
             | while Exp "{" Statement* "}"                     -- while
@@ -56,7 +56,7 @@ Bismath {
   Args      = ListOf<Exp, ",">
 
   Array     = "[" ListOf<Exp, ","> "]"
-  Matrix    =  "{" ListOf<Exp, " "> "}"
+  Matrix    =  "{" ListOf< ListOf<num, ",">, ";" > "}"
 
   in     	  = "in"  ~idchar
   declare   = "declare" ~idchar
