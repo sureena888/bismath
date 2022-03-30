@@ -13,6 +13,41 @@ export class Program {
   }
 }
 
+export class Block {
+  constructor(statements) {
+    this.statements = statements
+  }
+}
+
+export class Type {
+  // Type of all basic type int, float, string, etc. and superclass of others
+  static INT32 = new Type("int32")
+  static INT64 = new Type("int64")
+  static FLOAT32 = new Type("float32")
+  static FLOAT64 = new Type("float64")
+  static BOOL = new Type("bool")
+  static STRING = new Type("string")
+  constructor(description) {
+    Object.assign(this, { description })
+  }
+}
+
+export class ArrayType extends Type {
+  // Example: [int32]
+  constructor(baseType) {
+    super(`[${baseType.description}]`)
+    this.baseType = baseType
+  }
+}
+
+export class MatrixType extends Type {
+  // Example: {float64}
+  constructor(baseType) {
+    super(`{${baseType.description}}`)
+    this.baseType = baseType
+  }
+}
+
 export class VariableDeclaration {
   constructor(variable, initializer) {
     Object.assign(this, { variable, initializer })

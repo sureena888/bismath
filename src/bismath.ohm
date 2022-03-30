@@ -1,7 +1,6 @@
 Bismath {
 
-  Program     = Block* 
-  Block       = Statement+
+  Program     = Statement+
 	
   Statement   = MathStmt                             -- simple
                 | Loop       
@@ -11,7 +10,7 @@ Bismath {
   Suite       = "=" Statement                         -- small
                 | "="  Statement+                     -- complex
                        
-  MathStmt  = declare id "=" Exp							               -- assignment
+  MathStmt  = (StructTypes | NumTypes | GeneralTypes) id "=" Exp							               -- assignment
   				      | id "=" Exp                              	 -- assign
   				      | put Exp                                    -- print					
                 | output Exp?                                -- return
@@ -41,13 +40,11 @@ Bismath {
             | Array
             | Matrix       
             | "(" Exp ")"                                    -- parens
-         
-  Type     = "int" | "bool" | "str"
 
-  Loop      = for Type id in Exp                             -- for
-            | while Exp "{" Statement* "}"                     -- while
+  Loop      = for (NumTypes | GeneralTypes) id in Exp                             -- for
+            | while Exp "{" Statement* "}"                          -- while
   Conditional = ifconditional Exp Suite       
-             (otherwise Exp Suite)*						               -- if
+             (otherwise Exp Suite)*						              -- if
   
   Function    = function id "(" Params ")" Suite
 
@@ -56,7 +53,11 @@ Bismath {
   Args      = ListOf<Exp, ",">
 
   Array     = "[" ListOf<Exp, ","> "]"
-  Matrix    =  "{" ListOf< ListOf<num, ",">, ";" > "}"
+  Matrix    =  "[" ListOf< ListOf<num, ",">, ";" > "]"
+  
+  StructTypes = "[" (NumTypes | GeneralTypes) "]" | "{" NumTypes "}"
+  NumTypes = "int32" | "int64" | "float32" | "float64"
+  GeneralTypes = "bool" | "string"
 
   in     	  = "in"  ~idchar
   declare   = "declare" ~idchar
