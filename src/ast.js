@@ -37,6 +37,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   // Statement_while(_while, test, body) {
   //   return new core.WhileStatement(test.ast(), body.ast())
   // },
+
   Exp_unary(op, operand) {
     return new core.UnaryExpression(op.ast(), operand.ast())
   },
@@ -64,6 +65,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Exp7_parens(_open, expression, _close) {
     return expression.ast()
   },
+
   Call(callee, _left, args, _right) {
     return new core.Call(callee.ast(), args.asIteration().ast())
   },
@@ -78,6 +80,12 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   },
   num(_whole, _point, _fraction, _e, _sign, _exponent) {
     return new core.Token("Num", this.source)
+  },
+  float(_whole, _point, _fraction, _e, _sign, _exponent) {
+    return new core.Token("Float", this.source)
+  },
+  string(_openQuote, _chars, _closeQuote) {
+    return new core.Token("Str", this.source)
   },
   _terminal() {
     return new core.Token("Sym", this.source)

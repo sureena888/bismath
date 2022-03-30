@@ -120,7 +120,9 @@ class Context {
     // strategy only works here, but in more complex languages, we would do
     // proper type checking.
     if (t.category === "Id") t.value = this.get(t, Variable)
-    if (t.category === "Num") t.value = Number(t.lexeme)
+    if (t.category === "Num") t.value = BigInt(t.lexeme)
+    if (t.category === "Float") t.value = Number(t.lexeme)
+    if (t.category === "Str") t.value = t.lexeme
     if (t.category === "Bool") t.value = t.lexeme === "true"
   }
 
