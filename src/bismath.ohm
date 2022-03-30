@@ -1,21 +1,19 @@
 Bismath {
 
-  Program     = Statement+
+  Program   = Statement+ 
+  Block     = "{" Statement* "}"
 	
-  Statement   = MathStmt                             -- simple
-                | Loop       
-                | Conditional       
-                | Function       
-         
-  Suite       = "=" Statement                         -- small
-                | "="  Statement+                     -- complex
+  Statement = IfStmt                                      
+            | MathStmt       
+            | Loop      
+            | Function       
+    
                        
-  MathStmt  = (StructTypes | NumTypes | GeneralTypes) id "=" Exp							               -- assignment
-  				      | id "=" Exp                              	 -- assign
-  				      | put Exp                                    -- print					
-                | output Exp?                                -- return
-                | getout                                     -- break
-                | Exp       
+  MathStmt  = id "=" Exp ";"                                 -- assign
+  			    | put Exp ";"                                    -- print					
+            | output Exp? ";"                                -- return
+            | getout ";"                                     -- break
+            | Exp ";"                                        -- simple
        
   Exp       = ("-" | "!") Exp7                               -- unary
             | Exp1 "?" Exp1 ":" Exp                          -- ternary
@@ -30,37 +28,40 @@ Bismath {
             | Exp5       
   Exp5      = Exp5 ("*" | "/" | "%") Exp6                    -- binary
             | Exp6       
-  Exp6      = Exp7 "**" Exp6                                 -- binary
+  Exp6      = Exp7 "^" Exp6                                  -- binary
             | Exp7       
   Exp7      = num       
             | true       
             | false       
-            | Call       
+            | strlit
+            | Lookup
+            | Call
             | id
-            | Array
-            | Matrix       
+            | Matrix
+            | Vector
             | "(" Exp ")"                                    -- parens
+         
 
-  Loop      = for (NumTypes | GeneralTypes) id in Exp                             -- for
-            | while Exp "{" Statement* "}"                          -- while
-  Conditional = ifconditional Exp Suite       
-             (otherwise Exp Suite)*						              -- if
+  Loop      = for id in Exp Block                            -- for
+            | while Exp Block                                -- while
+            
+             
+  IfStmt    = "(" Exp ")" "->" Block (otherwise (Block | IfStmt))?   
   
-  Function    = function id "(" Params ")" Suite
+  Function  = function id "(" Params ")" Block
 
   Call      = id "(" Args ")"
   Params    = ListOf<id, ",">
   Args      = ListOf<Exp, ",">
 
-  Array     = "[" ListOf<Exp, ","> "]"
-  Matrix    =  "[" ListOf< ListOf<num, ",">, ";" > "]"
+  Matrix    = "[" ListOf<Exp, ","> "]"
+  Vector    =  "<" ListOf<(num | id), ","> ">"
+  Lookup    = Exp7 "[" Exp "]"
   
-  StructTypes = "[" (NumTypes | GeneralTypes) "]" | "{" NumTypes "}"
-  NumTypes = "int32" | "int64" | "float32" | "float64"
-  GeneralTypes = "bool" | "string"
+  strlit    = "\"" char* "\""
+  char      = ~"\"" ~"\n" any
 
   in     	  = "in"  ~idchar
-  declare   = "declare" ~idchar
   function  = "function" ~idchar
   for 	  	= "for" ~ idchar
   while     = "while" ~idchar
@@ -68,14 +69,13 @@ Bismath {
   false     = "false" ~idchar
   put       = "put" ~idchar
   getout    = "getout" ~idchar
-  ifconditional = "ifconditional" ~idchar
   otherwise = "otherwise" ~idchar
   output    = "output" ~idchar
-  keyword   = declare | function | while | true | false | put | getout | ifconditional 
-  			| otherwise | output | for
+  keyword   = function | while | true | false | put | getout | otherwise 
+            | output | for | in
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
   idchar    = letter | digit | "_"
-  space    += "//" (~"\n" any)* ("\n" | end)                 -- comment
-  newline     = "\n"+
+  space     += "//" (~"\n" any)* ("\n" | end)                -- comment
+  newline   = "\n"+
 }
