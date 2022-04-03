@@ -2,20 +2,20 @@ Bismath {
 
   Program     = Statement+
 	
-  Statement   = MathStmt                             -- simple
+  Statement   = MathStmt endline                             -- simple
                 | Loop       
                 | Conditional       
                 | Function       
          
-  Suite       = "=" Statement                         -- small
-                | "="  Statement+                     -- complex
+  Block      = "{" Statement* "}" endline                         -- small
+                | "{"  Statement+ "}" endline                    -- complex
                        
-  MathStmt  = (StructTypes | NumTypes | GeneralTypes) id "=" Exp							               -- assignment
+  MathStmt  = Type id "=" Exp 						               -- assignment
   				      | id "=" Exp                              	 -- assign
   				      | put Exp                                    -- print					
                 | output Exp?                                -- return
                 | getout                                     -- break
-                | Exp       
+                | Exp      
        
   Exp       = ("-" | "!") Exp7                               -- unary
             | Exp1 "?" Exp1 ":" Exp                          -- ternary
@@ -26,9 +26,9 @@ Bismath {
             | Exp3       
   Exp3      = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4        -- binary
             | Exp4
-  Exp4      = Exp4 ("+" | "-") Exp5                          -- binary
+  Exp4      = Exp4 ("+" | "-" | "|+|" | "|-|" | "<+>" | "<->") Exp5                          -- binary
             | Exp5       
-  Exp5      = Exp5 ("*" | "/" | "%") Exp6                    -- binary
+  Exp5      = Exp5 ("*" | "/" | "%" | "|*|" | "|D|" | "|T|" | "<*>") Exp6                    -- binary
             | Exp6       
   Exp6      = Exp7 "**" Exp6                                 -- binary
             | Exp7       
@@ -38,25 +38,32 @@ Bismath {
             | Call       
             | id
             | Array
-            | Matrix       
+            | Matrix  
+            | Vector
+            | Point     
             | "(" Exp ")"                                    -- parens
 
-  Loop      = for (NumTypes | GeneralTypes) id in Exp                             -- for
-            | while Exp "{" Statement* "}"                          -- while
-  Conditional = ifconditional Exp Suite       
-             (otherwise Exp Suite)*						              -- if
+  Loop  = for (NumTypes | GeneralTypes) id in Exp Block                             -- for  
+            | while Exp Block
+                                 -- while
+  Conditional = ifconditional Exp Block       
+             (otherwise Exp Block
+          )*						              -- if
   
-  Function    = function id "(" Params ")" Suite
+  Function    = function Type id "(" Params ")" Block
 
   Call      = id "(" Args ")"
   Params    = ListOf<id, ",">
   Args      = ListOf<Exp, ",">
 
   Array     = "[" ListOf<Exp, ","> "]"
-  Matrix    =  "[" ListOf< ListOf<num, ",">, ";" > "]"
+  Matrix    = "|" ListOf< ListOf<num, ",">, ";" > "|"
+  Vector   =  "<" num "," num ("," num)? ">"
+  Point     =  "(" num "," num ("," num)? ")"
   
-  StructTypes = "[" (NumTypes | GeneralTypes) "]" | "{" NumTypes "}"
-  NumTypes = "int32" | "int64" | "float32" | "float64"
+  Type =  (StructTypes | NumTypes | GeneralTypes) 
+  StructTypes = "[" (NumTypes | GeneralTypes) "]" | "|" NumTypes "|" | "<" NumTypes ">" | "(" NumTypes ")"
+  NumTypes = "int32" | "int64" | "int" | "float32" | "float64" | "float"
   GeneralTypes = "bool" | "string"
 
   in     	  = "in"  ~idchar
@@ -78,4 +85,5 @@ Bismath {
   idchar    = letter | digit | "_"
   space    += "//" (~"\n" any)* ("\n" | end)                 -- comment
   newline     = "\n"+
+  endline    = ";"
 }

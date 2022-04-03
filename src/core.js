@@ -21,14 +21,24 @@ export class Block {
 
 export class Type {
   // Type of all basic type int, float, string, etc. and superclass of others
+  static INT = new Type("int")
   static INT32 = new Type("int32")
   static INT64 = new Type("int64")
+  static FLOAT = new Type("float")
   static FLOAT32 = new Type("float32")
   static FLOAT64 = new Type("float64")
   static BOOL = new Type("bool")
   static STRING = new Type("string")
   constructor(description) {
     Object.assign(this, { description })
+  }
+}
+
+export class FunctionType extends Type {
+  // Example: (boolean,[string]?)->float
+  constructor(paramTypes, returnType) {
+    super(`${returnType.description}`)
+    Object.assign(this, { paramTypes, returnType })
   }
 }
 
@@ -41,9 +51,25 @@ export class ArrayType extends Type {
 }
 
 export class MatrixType extends Type {
-  // Example: {float64}
+  // Example: |float64|
   constructor(baseType) {
-    super(`{${baseType.description}}`)
+    super(`|${baseType.description}|`)
+    this.baseType = baseType
+  }
+}
+
+export class VectorType extends Type {
+  // Example: <5, 8, 3>
+  constructor(baseType) {
+    super(`<${baseType.description}>`)
+    this.baseType = baseType
+  }
+}
+
+export class PointType extends Type {
+  // Example: <5, 8, 3>
+  constructor(baseType) {
+    super(`(${baseType.description})`)
     this.baseType = baseType
   }
 }
@@ -66,9 +92,30 @@ export class Assignment {
   }
 }
 
+export class IfStatement {
+  // Example: if x < 3 { print(100); } else { break; }
+  constructor(test, consequent, alternate) {
+    Object.assign(this, { test, consequent, alternate })
+  }
+}
+
+export class ShortIfStatement {
+  // Example: if x < 3 { print(100); }
+  constructor(test, consequent) {
+    Object.assign(this, { test, consequent })
+  }
+}
+
 export class WhileStatement {
   constructor(test, body) {
     Object.assign(this, { test, body })
+  }
+}
+
+export class ForStatement {
+  // Example: for ball in balls { ball.bounce();  }
+  constructor(iterator, collection, body) {
+    Object.assign(this, { iterator, collection, body })
   }
 }
 

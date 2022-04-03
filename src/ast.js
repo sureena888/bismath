@@ -26,7 +26,18 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   MathStmt_return(_output, argument) {
     return new core.PrintStatement(argument.ast())
   },
-
+  MathStmt_break(_break, _semicolon) {
+    return new core.BreakStatement()
+  },
+  MathStmt_while(_while, test, body) {
+    return new core.WhileStatement(test.ast(), body.ast())
+  },
+  MathStmt_iflong(_if, test, consequent, _else, alternate) {
+    return new core.IfStatement(test.ast(), consequent.ast(), alternate.ast())
+  },
+  MathStmt_ifshort(_if, test, consequent) {
+    return new core.ShortIfStatement(test.ast(), consequent.ast())
+  },
   // Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
   //   return new core.FunctionDeclaration(
   //     id.ast(),
