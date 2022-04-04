@@ -6,12 +6,12 @@ Bismath {
                 | Loop       
                 | Conditional       
                 | Function
-                | Call       
+                | Call
          
   Block      = "{" Statement* "}" endline                         -- small
                 | "{"  Statement+ "}" endline                    -- complex
                        
-  MathStmt  = Type id "=" Exp 						               -- assignment
+  MathStmt  = Type? id "=" Exp 						               -- assignment
   				      | id "=" Exp                              	 -- assign
   				      | put Exp                                    -- print					
                 | output Exp?                                -- return
@@ -51,11 +51,14 @@ Bismath {
              (otherwise Exp Block
           )*						              -- if
   
-  Function    = function Type id "(" Params ")" Block
+  Function    = function Type? id "(" Params ")" Block
 
   Call      = id "(" Args ")"
-  Params    = ListOf<id, ",">
-  Args      = ListOf<Exp, ",">
+  Params    = ListOf<ParamId, ",">
+  Args      = ListOf<PossibleArgs, ",">
+  
+  ParamId = Type? id
+  PossibleArgs = Type? Exp
 
   Array     = "[" ListOf<Exp, ","> "]"
   Matrix    = "|" ListOf< ListOf<num, ",">, ";" > "|"
