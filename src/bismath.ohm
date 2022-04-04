@@ -5,7 +5,8 @@ Bismath {
   Statement   = MathStmt endline                             -- simple
                 | Loop       
                 | Conditional       
-                | Function       
+                | Function
+                | Call       
          
   Block      = "{" Statement* "}" endline                         -- small
                 | "{"  Statement+ "}" endline                    -- complex

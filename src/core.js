@@ -35,7 +35,6 @@ export class Type {
 }
 
 export class FunctionType extends Type {
-  // Example: (boolean,[string]?)->float
   constructor(paramTypes, returnType) {
     super(`${returnType.description}`)
     Object.assign(this, { paramTypes, returnType })

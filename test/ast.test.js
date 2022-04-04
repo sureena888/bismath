@@ -2,7 +2,17 @@ import assert from "assert/strict"
 import util from "util"
 import ast from "../src/ast.js"
 
-const source = `declare b = 5 + (7-9) * (4+1)`
+// const source = `declare b = 5 + (7-9) * (4+1)`
+const source = `
+(int) point1 = (1, 5, 3);
+<int> vec2 = <7, 3, 5>;
+point1 = point1 <*> vec2;
+
+function |int| GetMatrix () {
+  |int| newMatrix = |4, 5; 1, 2|;
+  return newMatrix;
+}
+`
 
 const expected = `   1 | Program statements=[#2]
    2 | Program statements = [#2]
