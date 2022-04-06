@@ -15,7 +15,7 @@ When thinking of the possible new programming languages, we struggled to find on
 ### Examples
 
 A basic "isEven" function that takes in a vector and asses if it's even
-
+```
 function isEven(vector) {
     for num in vector {
         (num % 2 != 0) -> {
@@ -29,7 +29,7 @@ function isEven(vector) {
 
 example = <2,4,6,7,8>;
 put isEven(example);
-
+```
 
 
 [Link](url) and ![Image](src)
