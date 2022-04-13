@@ -32,7 +32,8 @@ example = <2,4,6,7,8>;
 ```
 
 ## Our Team!
-[IMG_9302](https://user-images.githubusercontent.com/53411789/163083393-235847b6-0121-4908-aa8a-3f235ed39c3f.jpeg)
+put ![IMG_9302](https://user-images.githubusercontent.com/53411789/163083942-3db16996-7549-40a3-8269-aff5f473b100.jpeg)
+
 
 Left to Right: Sureena Hukkoo, Kevin carpio, Christopher Carmona 
 Not pictured: Harrison Roskopp
