@@ -31,8 +31,8 @@ example = <2,4,6,7,8>;
 
 ```
 
-## Our Team
-put isEven(example);![IMG_9302](https://user-images.githubusercontent.com/53411789/163082491-7896d648-02de-4fcc-9031-130bf03e5139.jpeg)
+## Our Team!
+[IMG_9302](https://user-images.githubusercontent.com/53411789/163083393-235847b6-0121-4908-aa8a-3f235ed39c3f.jpeg)
 
 Left to Right: Sureena Hukkoo, Kevin carpio, Christopher Carmona 
 Not pictured: Harrison Roskopp
