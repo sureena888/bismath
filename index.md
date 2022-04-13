@@ -28,8 +28,14 @@ function isEven(vector) {
 }
 
 example = <2,4,6,7,8>;
-put isEven(example);
+
 ```
+
+## Our Team
+put isEven(example);![IMG_9302](https://user-images.githubusercontent.com/53411789/163082491-7896d648-02de-4fcc-9031-130bf03e5139.jpeg)
+
+Left to Right: Sureena Hukkoo, Kevin carpio, Christopher Carmona 
+Not pictured: Harrison Roskopp
 
 
 [Link](url) and ![Image](src)
