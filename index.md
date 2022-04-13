@@ -36,6 +36,3 @@ put isEven(example);![IMG_9302](https://user-images.githubusercontent.com/534117
 
 Left to Right: Sureena Hukkoo, Kevin carpio, Christopher Carmona 
 Not pictured: Harrison Roskopp
-
-
-[Link](url) and ![Image](src)
