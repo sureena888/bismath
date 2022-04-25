@@ -44,7 +44,7 @@ Bismath {
             | Point     
             | "(" Exp ")"                                    -- parens
 
-  Loop      = for (NumTypes | GeneralTypes) id in Exp Block                             -- for  
+  Loop      = for id in Exp Block                                                       -- for  
             | while Exp Block                                                           -- while
 
   IfStmt    = "(" Exp ")" "->" Block otherwise (Block | IfStmt)   -- long

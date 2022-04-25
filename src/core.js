@@ -92,14 +92,12 @@ export class Assignment {
 }
 
 export class IfStatement {
-  // Example: if x < 3 { print(100); } else { break; }
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate })
   }
 }
 
 export class ShortIfStatement {
-  // Example: if x < 3 { print(100); }
   constructor(test, consequent) {
     Object.assign(this, { test, consequent })
   }
@@ -112,7 +110,6 @@ export class WhileStatement {
 }
 
 export class ForStatement {
-  // Example: for ball in balls { ball.bounce();  }
   constructor(iterator, collection, body) {
     Object.assign(this, { iterator, collection, body })
   }

@@ -8,16 +8,13 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new core.Program(body.ast())
   },
-  Block(body) {
-    return body.ast()
-  },
-  Statement(body) {
+  Block(_left, body, _right) {
     return body.ast()
   },
   MathStmt_assignment(_declare, id, _eq, initializer) {
     return new core.VariableDeclaration(id.ast(), initializer.ast())
   },
-  MathStmt_assign(id, _eq, expression) {
+  MathStmt_assign(id, _eq, expression, _semi) {
     return new core.Assignment(id.ast(), expression.ast())
   },
   MathStmt_print(_put, argument) {
@@ -29,13 +26,16 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   MathStmt_break(_break, _semicolon) {
     return new core.BreakStatement()
   },
-  MathStmt_while(_while, test, body) {
+  Loop_for(_for, id, _in, collection, body) {
+    return new core.ForStatement(id.ast(), collection.ast(), body.ast())
+  },
+  Loop_while(_while, test, body) {
     return new core.WhileStatement(test.ast(), body.ast())
   },
-  MathStmt_iflong(_if, test, consequent, _else, alternate) {
+  IfStmt_long(_left, test, _right, _arrow, consequent, _otherwise, alternate) {
     return new core.IfStatement(test.ast(), consequent.ast(), alternate.ast())
   },
-  MathStmt_ifshort(_if, test, consequent) {
+  IfStmt_short(_left, test, _right, _arrow, consequent) {
     return new core.ShortIfStatement(test.ast(), consequent.ast())
   },
   // Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
@@ -95,7 +95,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   float(_whole, _point, _fraction, _e, _sign, _exponent) {
     return new core.Token("Float", this.source)
   },
-  string(_openQuote, _chars, _closeQuote) {
+  stringlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
   _terminal() {
