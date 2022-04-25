@@ -2,21 +2,19 @@ Bismath {
 
   Program     = Statement+
 	
-  Statement   = MathStmt endline                             -- simple
-                | Loop       
-                | Conditional       
-                | Function
-                | Call
+  Statement   = IfStmt                             
+              | MathStmt       
+              | Loop 
+              | Function
+              | Call
          
-  Block      = "{" Statement* "}" endline                         -- small
-                 | "{"  Statement+ "}" endline                    -- complex
+  Block      = "{" Statement* "}"                                     
                        
-  MathStmt  = Type? id "=" Exp 						               -- assignment
-  				      | id "=" Exp                              	 -- assign
-  				      | put Exp                                    -- print					
-                | output Exp?                                -- return
-                | getout                                     -- break
-                | Exp      
+  MathStmt  = Type? id "=" Exp endline						              -- assignment
+  				  | id "=" Exp endline                             	  -- assign
+  				  | put Exp endline                                   -- print					
+            | output Exp? endline                               -- return
+            | getout endline                                    -- break    
        
   Exp       = ("-" | "!") Exp7                               -- unary
             | Exp1 "?" Exp1 ":" Exp                          -- ternary
@@ -31,11 +29,13 @@ Bismath {
             | Exp5       
   Exp5      = Exp5 ("*" | "/" | "%" | "|*|" | "|D|" | "|T|" | "<*>") Exp6                    -- binary
             | Exp6       
-  Exp6      = Exp7 "**" Exp6                                 -- binary
+  Exp6      = Exp7 "^" Exp6                                 -- binary
             | Exp7       
   Exp7      = num       
             | true       
-            | false       
+            | false
+            | strlit
+            | Lookup       
             | Call       
             | id
             | Array
@@ -44,12 +44,13 @@ Bismath {
             | Point     
             | "(" Exp ")"                                    -- parens
 
-  Loop  = for (NumTypes | GeneralTypes) id in Exp Block                             -- for  
-            | while Exp Block
-                                 -- while
-  Conditional = ifconditional Exp Block (otherwise (Block | Conditional))?        -- if
+  Loop      = for (NumTypes | GeneralTypes) id in Exp Block                             -- for  
+            | while Exp Block                                                           -- while
+
+  IfStmt    = "(" Exp ")" "->" Block otherwise (Block | IfStmt)   -- long
+            | "(" Exp ")" "->" Block                              -- short
   
-  Function    = function Type? id "(" Params ")" Block
+  Function  = function Type? id "(" Params ")" Block
 
   Call      = id "(" Args ")"
   Params    = ListOf<ParamId, ",">
@@ -59,9 +60,17 @@ Bismath {
   PossibleArgs = Type? Exp
 
   Array     = "[" ListOf<Exp, ","> "]"
-  Matrix    = "|" ListOf< ListOf<num, ",">, ";" > "|"
-  Vector    = "<" num "," num ("," num)? ">"
-  Point     = "(" num "," num ("," num)? ")"
+  Matrix    = "|" ListOf< ListOf<(num | id), ",">, ";" > "|"
+  Vector    =  "<" ListOf<(num | id), ","> ">"
+  Point     =  "(" num "," num ("," num)? ")"
+  Lookup    = Exp7 "[" Exp "]"
+
+  strlit    = "\"" char* "\""
+  char      = ~control ~"\\" ~"\"" any
+            | "\\" ("n" | "t" | "\"" | "\\")                --escape
+            | "\\u{" hex hex? hex? hex? hex? hex? "}"       --codepoint
+  control   = "\x00".."\x1f" | "\x80".."\x9f"
+  hex       = hexDigit
   
   Type =  (StructTypes | NumTypes | GeneralTypes) 
   StructTypes = "[" (NumTypes | GeneralTypes) "]" | "|" NumTypes "|" | "<" NumTypes ">" | "(" NumTypes ")"
@@ -77,11 +86,9 @@ Bismath {
   false     = "false" ~idchar
   put       = "put" ~idchar
   getout    = "getout" ~idchar
-  ifconditional = "ifconditional" ~idchar
   otherwise = "otherwise" ~idchar
   output    = "output" ~idchar
-  keyword   = declare | function | while | true | false | put | getout | ifconditional 
-  			| otherwise | output | for
+  keyword   = function | while | true | false | put | getout | otherwise | output | for | in
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
   idchar    = letter | digit | "_"
