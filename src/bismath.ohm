@@ -9,7 +9,7 @@ Bismath {
                 | Call
          
   Block      = "{" Statement* "}" endline                         -- small
-                | "{"  Statement+ "}" endline                    -- complex
+                 | "{"  Statement+ "}" endline                    -- complex
                        
   MathStmt  = Type? id "=" Exp 						               -- assignment
   				      | id "=" Exp                              	 -- assign
@@ -47,9 +47,7 @@ Bismath {
   Loop  = for (NumTypes | GeneralTypes) id in Exp Block                             -- for  
             | while Exp Block
                                  -- while
-  Conditional = ifconditional Exp Block       
-             (otherwise Exp Block
-          )*						              -- if
+  Conditional = ifconditional Exp Block (otherwise (Block | Conditional))?        -- if
   
   Function    = function Type? id "(" Params ")" Block
 

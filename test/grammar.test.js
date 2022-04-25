@@ -28,10 +28,9 @@ const syntaxChecks = [
   ["call in statement, no types", "int x = 1; f( 2, 9); print(x);"],
   ["call in statement, with types", "(int) p = (3, 7, 4); f( int 21, float 4.64); print(y);"]
   ["call in exp", "print(5 * f(x, y, 2 * y));"],
+  ["short if", "int x = 1; ifconditional true { x = 5; };"],
+  ["longer if", "int x = 1; ifconditional true { x = 5; }; otherwise { x = 10; };"],
 
-  ["short if", "if true { print(1); }"],
-  ["longer if", "if true { print(1); } else { print(1); }"],
-  
   ["even longer if", "if true { print(1); } else if false { print(1);}"],
   ["while with empty block", "while true {}"],
   ["while with one statement block", "while true { let x = 1; }"],
