@@ -180,6 +180,9 @@ export const standardLibrary = Object.freeze({
   exp: new Function("exp", 1, true),
   ln: new Function("ln", 1, true),
   hypot: new Function("hypot", 2, true),
+
+  Determinant: new Function("|D|", 1, true),
+  Transpose: new Function("|T|", 1, true)
 })
 
 // Throw an error message that takes advantage of Ohm's messaging

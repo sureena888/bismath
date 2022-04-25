@@ -60,8 +60,8 @@ Bismath {
 
   Array     = "[" ListOf<Exp, ","> "]"
   Matrix    = "|" ListOf< ListOf<num, ",">, ";" > "|"
-  Vector   =  "<" num "," num ("," num)? ">"
-  Point     =  "(" num "," num ("," num)? ")"
+  Vector    = "<" num "," num ("," num)? ">"
+  Point     = "(" num "," num ("," num)? ")"
   
   Type =  (StructTypes | NumTypes | GeneralTypes) 
   StructTypes = "[" (NumTypes | GeneralTypes) "]" | "|" NumTypes "|" | "<" NumTypes ">" | "(" NumTypes ")"
