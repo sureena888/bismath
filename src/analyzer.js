@@ -43,6 +43,8 @@ Object.assign(ArrayType.prototype, {
   },
 })
 
+
+
 Object.assign(FunctionType.prototype, {
   isEquivalentTo(target) {
     return (

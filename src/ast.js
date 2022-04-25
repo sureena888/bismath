@@ -38,6 +38,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   IfStmt_short(_left, test, _right, _arrow, consequent) {
     return new core.ShortIfStatement(test.ast(), consequent.ast())
   },
+
   // Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
   //   return new core.FunctionDeclaration(
   //     id.ast(),
@@ -98,9 +99,9 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   stringlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
-  _terminal() {
-    return new core.Token("Sym", this.source)
-  },
+  // _terminal() {
+  //   return new core.Token("Sym", this.source)
+  // },
   _iter(...children) {
     return children.map((child) => child.ast())
   },
