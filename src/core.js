@@ -19,40 +19,38 @@ export class Block {
   }
 }
 
-export class Type {
-  // Type of all basic type int, float, string, etc. and superclass of others
-  static INT32 = new Type("int32")
-  static INT64 = new Type("int64")
-  static FLOAT32 = new Type("float32")
-  static FLOAT64 = new Type("float64")
-  static BOOL = new Type("bool")
-  static STRING = new Type("string")
-  constructor(description) {
-    Object.assign(this, { description })
-  }
-}
+// export class Type {
+//   // Type of all basic type int, float, string, etc. and superclass of others
+//   static FLOAT32 = new Type("float32")
+//   static FLOAT64 = new Type("float64")
+//   static BOOL = new Type("bool")
+//   static STRING = new Type("string")
+//   constructor(description) {
+//     Object.assign(this, { description })
+//   }
+// }
 
-export class ArrayType extends Type {
-  // Example: [int32]
-  constructor(baseType) {
-    super(`[${baseType.description}]`)
-    this.baseType = baseType
-  }
-}
+// export class ArrayType extends Type {
+//   // Example: [int32]
+//   constructor(baseType) {
+//     super(`[${baseType.description}]`)
+//     this.baseType = baseType
+//   }
+// }
 
-export class MatrixType extends Type {
-  // Example: {float64}
-  constructor(baseType) {
-    super(`{${baseType.description}}`)
-    this.baseType = baseType
-  }
-}
+// export class MatrixType extends Type {
+//   // Example: {float64}
+//   constructor(baseType) {
+//     super(`{${baseType.description}}`)
+//     this.baseType = baseType
+//   }
+// }
 
-export class VariableDeclaration {
-  constructor(variable, initializer) {
-    Object.assign(this, { variable, initializer })
-  }
-}
+// export class VariableDeclaration {
+//   constructor(variable, initializer) {
+//     Object.assign(this, { variable, initializer })
+//   }
+// }
 
 export class FunctionDeclaration {
   constructor(fun, params, body) {
@@ -78,6 +76,28 @@ export class PrintStatement {
   }
 }
 
+export class ReturnStatement {
+  constructor(argument) {
+    Object.assign(this, { argument })
+  }
+}
+
+export class BreakStatement {
+  // empty
+}
+
+export class ExpressionStatement {
+  constructor(expression) {
+    Object.assign(this, { expression })
+  }
+}
+
+export class ForStatement {
+  constructor(iterator, collection, body) {
+    Object.assign(this, { iterator, collection, body })
+  }
+}
+
 export class Call {
   constructor(callee, args) {
     Object.assign(this, { callee, args })
@@ -87,6 +107,18 @@ export class Call {
 export class Conditional {
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate })
+  }
+}
+
+export class IfStatement {
+  constructor(test, consequent, alternate) {
+    Object.assign(this, { test, consequent, alternate })
+  }
+}
+
+export class ShortIfStatement {
+  constructor(test, consequent) {
+    Object.assign(this, { test, consequent })
   }
 }
 
@@ -102,6 +134,23 @@ export class UnaryExpression {
   }
 }
 
+export class MatrixExpression {
+  constructor(elements) {
+    this.elements = elements
+  }
+}
+
+export class VectorExpression {
+  constructor(elements) {
+    this.elements = elements
+  }
+}
+
+export class LookupExpression {
+  constructor(collection, index) {
+    Object.assign(this, { collection, index })
+  }
+}
 // Token objects are wrappers around the Nodes produced by Ohm. We use
 // them here just for simple things like numbers and identifiers. The
 // Ohm node will go in the "source" property.
@@ -170,9 +219,7 @@ Program.prototype[util.inspect.custom] = function () {
     function view(e) {
       if (tags.has(e)) return `#${tags.get(e)}`
       if (e?.constructor === Token) {
-        return `(${e.category},"${e.lexeme}"${
-          e.value ? "," + view(e.value) : ""
-        })`
+        return `(${e.category},"${e.lexeme}"${e.value ? "," + view(e.value) : ""})`
       }
       if (Array.isArray(e)) return `[${e.map(view)}]`
       return util.inspect(e)

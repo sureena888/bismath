@@ -8,36 +8,30 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new core.Program(body.ast())
   },
-  Block(body) {
-    return body.ast()
+  Block(_open, statements, _close) {
+    return statements.ast()
   },
-  Statement(body) {
-    return body.ast()
+  IfStmt_long(_left, test, _right, _arrow, consequent, _otherwise, alternate) {
+    return new core.IfStatement(test.ast(), consequent.ast(), alternate.ast())
   },
-  MathStmt_assignment(_declare, id, _eq, initializer) {
-    return new core.VariableDeclaration(id.ast(), initializer.ast())
+  IfStmt_short(_left, test, _right, _arrow, consequent) {
+    return new core.ShortIfStatement(test.ast(), consequent.ast())
   },
-  MathStmt_assign(id, _eq, expression) {
+  MathStmt_assignment(id, _eq, expression, _semi) {
     return new core.Assignment(id.ast(), expression.ast())
   },
-  MathStmt_print(_put, argument) {
+  MathStmt_print(_put, argument, _semi) {
     return new core.PrintStatement(argument.ast())
   },
-  MathStmt_return(_output, argument) {
-    return new core.PrintStatement(argument.ast())
+  MathStmt_return(_output, argument, _semi) {
+    return new core.ReturnStatement(argument.ast())
   },
-
-  // Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
-  //   return new core.FunctionDeclaration(
-  //     id.ast(),
-  //     params.asIteration().ast(),
-  //     body.ast()
-  //   )
-  // },
-  // Statement_while(_while, test, body) {
-  //   return new core.WhileStatement(test.ast(), body.ast())
-  // },
-
+  MathStmt_break(_break, _semi) {
+    return new core.BreakStatement()
+  },
+  MathStmt_simple(expression, _semi) {
+    return new core.ExpressionStatement(expression.ast())
+  },
   Exp_unary(op, operand) {
     return new core.UnaryExpression(op.ast(), operand.ast())
   },
@@ -65,9 +59,32 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Exp7_parens(_open, expression, _close) {
     return expression.ast()
   },
-
+  Loop_for(_for, id, _in, collection, body) {
+    return new core.ForStatement(id.ast(), collection.ast(), body.ast())
+  },
+  Loop_while(_while, test, body) {
+    return new core.WhileStatement(test.ast(), body.ast())
+  },
+  Function(_function, id, _left, params, _right, block) {
+    return new core.FunctionDeclaration(id.ast(), params.asIteration().ast(), block.ast())
+  },
   Call(callee, _left, args, _right) {
     return new core.Call(callee.ast(), args.asIteration().ast())
+  },
+  Params(identifiers) {
+    return identifiers.asIteration().ast()
+  },
+  Args(expressions) {
+    return expressions.asIteration().ast()
+  },
+  Matrix(_left, args, _right) {
+    return new core.MatrixExpression(args.asIteration().ast())
+  },
+  Vector(_left, args, _right) {
+    return new core.VectorExpression(args.asIteration().ast())
+  },
+  Lookup(collection, _left, index, _right) {
+    return new core.LookupExpression(collection.ast(), index.ast())
   },
   id(_first, _rest) {
     return new core.Token("Id", this.source)
@@ -81,10 +98,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   num(_whole, _point, _fraction, _e, _sign, _exponent) {
     return new core.Token("Num", this.source)
   },
-  float(_whole, _point, _fraction, _e, _sign, _exponent) {
-    return new core.Token("Float", this.source)
-  },
-  string(_openQuote, _chars, _closeQuote) {
+  strlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
   _terminal() {

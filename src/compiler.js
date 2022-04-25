@@ -1,5 +1,5 @@
 import ast from "./ast.js"
-// import analyze from "./analyzer.js"
+import analyze from "./analyzer.js"
 // import optimize from "./optimizer.js"
 // import generate from "./generator.js"
 
