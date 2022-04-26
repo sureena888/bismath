@@ -3,21 +3,21 @@
 // Invoke generate(program) with the program node to get back the JavaScript
 // translation as a string.
 
-import { IfStatement, Type, StructType } from "./core.js"
-import * as stdlib from "./stdlib.js"
+import { IfStatement, Type, standardLibrary } from "./core.js"
+// import stdlib from "./core.js"
 
 export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.contents.print, (x) => `console.log(${x})`],
-    [stdlib.contents.sin, (x) => `Math.sin(${x})`],
-    [stdlib.contents.cos, (x) => `Math.cos(${x})`],
-    [stdlib.contents.exp, (x) => `Math.exp(${x})`],
-    [stdlib.contents.ln, (x) => `Math.log(${x})`],
-    [stdlib.contents.hypot, ([x, y]) => `Math.hypot(${x},${y})`],
+    [standardLibrary.contents.print, (x) => `console.log(${x})`],
+    [standardLibrary.contents.sin, (x) => `Math.sin(${x})`],
+    [standardLibrary.contents.cos, (x) => `Math.cos(${x})`],
+    [standardLibrary.contents.exp, (x) => `Math.exp(${x})`],
+    [standardLibrary.contents.ln, (x) => `Math.log(${x})`],
+    [standardLibrary.contents.hypot, ([x, y]) => `Math.hypot(${x},${y})`],
 
-    [stdlib.contents.Determinant, ([matrix]) => `
+    [standardLibrary.contents.Determinant, ([matrix]) => `
     
     `]
   ])
@@ -78,7 +78,7 @@ export default function generate(program) {
     },
     Variable(v) {
       // Standard library constants just get special treatment
-      if (v === stdlib.contents.π) {
+      if (v === standardLibrary.contents.π) {
         return "Math.PI"
       }
       return targetName(v)

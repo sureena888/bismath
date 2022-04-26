@@ -17,7 +17,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   MathStmt_assign(id, _eq, expression, _semi) {
     return new core.Assignment(id.ast(), expression.ast())
   },
-  MathStmt_print(_put, argument) {
+  MathStmt_print(_put, argument, _endline) {
     return new core.PrintStatement(argument.ast())
   },
   MathStmt_return(_output, argument) {
