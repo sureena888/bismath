@@ -92,14 +92,12 @@ export class Assignment {
 }
 
 export class IfStatement {
-  // Example: if x < 3 { print(100); } else { break; }
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate })
   }
 }
 
 export class ShortIfStatement {
-  // Example: if x < 3 { print(100); }
   constructor(test, consequent) {
     Object.assign(this, { test, consequent })
   }
@@ -112,7 +110,6 @@ export class WhileStatement {
 }
 
 export class ForStatement {
-  // Example: for ball in balls { ball.bounce();  }
   constructor(iterator, collection, body) {
     Object.assign(this, { iterator, collection, body })
   }
@@ -180,6 +177,9 @@ export const standardLibrary = Object.freeze({
   exp: new Function("exp", 1, true),
   ln: new Function("ln", 1, true),
   hypot: new Function("hypot", 2, true),
+
+  Determinant: new Function("|D|", 1, true),
+  Transpose: new Function("|T|", 1, true)
 })
 
 // Throw an error message that takes advantage of Ohm's messaging

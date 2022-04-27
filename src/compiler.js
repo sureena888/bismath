@@ -1,7 +1,7 @@
 import ast from "./ast.js"
-// import analyze from "./analyzer.js"
-// import optimize from "./optimizer.js"
-// import generate from "./generator.js"
+import analyze from "./analyzer.js"
+import optimize from "./optimizer.js"
+import generate from "./generator.js"
 
 export default function compile(source, outputType) {
   if (!["ast", "analyzed", "optimized", "js"].includes(outputType)) {
