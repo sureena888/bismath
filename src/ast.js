@@ -11,7 +11,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Block(_left, body, _right) {
     return body.ast()
   },
-  MathStmt_assignment(_declare, id, _eq, initializer) {
+  MathStmt_assignment(_declare, id, _eq, initializer, _endline) {
     return new core.VariableDeclaration(id.ast(), initializer.ast())
   },
   MathStmt_assign(id, _eq, expression, _semi) {
@@ -20,7 +20,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   MathStmt_print(_put, argument, _endline) {
     return new core.PrintStatement(argument.ast())
   },
-  MathStmt_return(_output, argument) {
+  MathStmt_return(_output, argument, _endline) {
     return new core.PrintStatement(argument.ast())
   },
   MathStmt_break(_break, _semicolon) {
