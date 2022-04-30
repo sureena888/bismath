@@ -32,23 +32,27 @@ const optimizers = {
     p.statements = optimize(p.statements)
     return p
   },
+  Block(b) {
+    b.statements = optimize(p.statements)
+    return b
+  },
   VariableDeclaration(d) {
     d.variable = optimize(d.variable)
     d.initializer = optimize(d.initializer)
     return d
   },
-  TypeDeclaration(d) {
-    d.type = optimize(d.type)
-    return d
-  },
-  Field(f) {
-    f.name = f.name.lexeme
-    return f
-  },
-  StructType(d) {
-    d.fields = optimize(d.fields)
-    return d
-  },
+  // TypeDeclaration(d) {
+  //   d.type = optimize(d.type)
+  //   return d
+  // },
+  // Field(f) {
+  //   f.name = f.name.lexeme
+  //   return f
+  // },
+  // StructType(d) {
+  //   d.fields = optimize(d.fields)
+  //   return d
+  // },
   FunctionDeclaration(d) {
     d.fun = optimize(d.fun)
     d.parameters = optimize(d.parameters)
@@ -61,36 +65,36 @@ const optimizers = {
   Function(f) {
     return f
   },
-  Parameter(p) {
-    p.name = optimize(p.name)
-    return p
-  },
-  Increment(s) {
-    s.variable = optimize(s.variable)
-    return s
-  },
-  Decrement(s) {
-    s.variable = optimize(s.variable)
-    return s
-  },
-  Assignment(s) {
-    s.source = optimize(s.source)
-    s.target = optimize(s.target)
-    if (s.source === s.target) {
-      return []
-    }
-    return s
-  },
-  BreakStatement(s) {
-    return s
-  },
-  ReturnStatement(s) {
-    s.expression = optimize(s.expression)
-    return s
-  },
-  ShortReturnStatement(s) {
-    return s
-  },
+  // Parameter(p) {
+  //   p.name = optimize(p.name)
+  //   return p
+  // },
+  // Increment(s) {
+  //   s.variable = optimize(s.variable)
+  //   return s
+  // },
+  // Decrement(s) {
+  //   s.variable = optimize(s.variable)
+  //   return s
+  // },
+  // Assignment(s) {
+  //   s.source = optimize(s.source)
+  //   s.target = optimize(s.target)
+  //   if (s.source === s.target) {
+  //     return []
+  //   }
+  //   return s
+  // },
+  // BreakStatement(s) {
+  //   return s
+  // },
+  // ReturnStatement(s) {
+  //   s.expression = optimize(s.expression)
+  //   return s
+  // },
+  // ShortReturnStatement(s) {
+  //   return s
+  // },
   IfStatement(s) {
     s.test = optimize(s.test)
     s.consequent = optimize(s.consequent)
@@ -117,30 +121,30 @@ const optimizers = {
     s.body = optimize(s.body)
     return s
   },
-  RepeatStatement(s) {
-    s.count = optimize(s.count)
-    if (s.count === 0) {
-      // repeat 0 times is a no-op
-      return []
-    }
-    s.body = optimize(s.body)
-    return s
-  },
-  ForRangeStatement(s) {
-    s.iterator = optimize(s.iterator)
-    s.low = optimize(s.low)
-    s.op = optimize(s.op)
-    s.high = optimize(s.high)
-    s.body = optimize(s.body)
-    if (s.low.constructor === Number) {
-      if (s.high.constructor === Number) {
-        if (s.low > s.high) {
-          return []
-        }
-      }
-    }
-    return s
-  },
+  // RepeatStatement(s) {
+  //   s.count = optimize(s.count)
+  //   if (s.count === 0) {
+  //     // repeat 0 times is a no-op
+  //     return []
+  //   }
+  //   s.body = optimize(s.body)
+  //   return s
+  // },
+  // ForRangeStatement(s) {
+  //   s.iterator = optimize(s.iterator)
+  //   s.low = optimize(s.low)
+  //   s.op = optimize(s.op)
+  //   s.high = optimize(s.high)
+  //   s.body = optimize(s.body)
+  //   if (s.low.constructor === Number) {
+  //     if (s.high.constructor === Number) {
+  //       if (s.low > s.high) {
+  //         return []
+  //       }
+  //     }
+  //   }
+  //   return s
+  // },
   ForStatement(s) {
     s.iterator = optimize(s.iterator)
     s.collection = optimize(s.collection)
@@ -149,6 +153,10 @@ const optimizers = {
       return []
     }
     return s
+  },
+  PrintStatement(p) {
+    p.argument = optimize(p.argument)
+    return p
   },
   Conditional(e) {
     e.test = optimize(e.test)
@@ -214,25 +222,25 @@ const optimizers = {
     }
     return e
   },
-  EmptyOptional(e) {
-    return e
-  },
-  SubscriptExpression(e) {
-    e.array = optimize(e.array)
-    e.index = optimize(e.index)
-    return e
-  },
-  ArrayExpression(e) {
-    e.elements = optimize(e.elements)
-    return e
-  },
-  EmptyArray(e) {
-    return e
-  },
-  MemberExpression(e) {
-    e.object = optimize(e.object)
-    return e
-  },
+  // EmptyOptional(e) {
+  //   return e
+  // },
+  // SubscriptExpression(e) {
+  //   e.array = optimize(e.array)
+  //   e.index = optimize(e.index)
+  //   return e
+  // },
+  // ArrayExpression(e) {
+  //   e.elements = optimize(e.elements)
+  //   return e
+  // },
+  // EmptyArray(e) {
+  //   return e
+  // },
+  // MemberExpression(e) {
+  //   e.object = optimize(e.object)
+  //   return e
+  // },
   Call(c) {
     c.callee = optimize(c.callee)
     c.args = optimize(c.args)
