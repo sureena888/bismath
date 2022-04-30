@@ -9,6 +9,7 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
     return new core.Program(body.ast())
   },
   Block(_open, statements, _close) {
+    // return new core.Block(statements.ast())
     return statements.ast()
   },
   IfStmt_long(_left, test, _right, _arrow, consequent, _otherwise, alternate) {
@@ -16,6 +17,9 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   },
   IfStmt_short(_left, test, _right, _arrow, consequent) {
     return new core.ShortIfStatement(test.ast(), consequent.ast())
+  },
+  MathStmt_vardec(modifier, variable, _eq, initializer, _semi) {
+    return new core.VariableDeclaration(modifier.ast(), variable.ast(), initializer.ast())
   },
   MathStmt_assignment(id, _eq, expression, _semi) {
     return new core.Assignment(id.ast(), expression.ast())
@@ -29,9 +33,9 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   MathStmt_break(_break, _semi) {
     return new core.BreakStatement()
   },
-  MathStmt_simple(expression, _semi) {
-    return new core.ExpressionStatement(expression.ast())
-  },
+  // MathStmt_simple(expression, _semi) {
+  //   return new core.ExpressionStatement(expression.ast())
+  // },
   Exp_unary(op, operand) {
     return new core.UnaryExpression(op.ast(), operand.ast())
   },
@@ -71,12 +75,12 @@ const astBuilder = bismathGrammar.createSemantics().addOperation("ast", {
   Call(callee, _left, args, _right) {
     return new core.Call(callee.ast(), args.asIteration().ast())
   },
-  Params(identifiers) {
-    return identifiers.asIteration().ast()
-  },
-  Args(expressions) {
-    return expressions.asIteration().ast()
-  },
+  // Params(identifiers) {
+  //   return identifiers.asIteration().ast()
+  // },
+  // Args(expressions) {
+  //   return expressions.asIteration().ast()
+  // },
   Matrix(_left, args, _right) {
     return new core.MatrixExpression(args.asIteration().ast())
   },

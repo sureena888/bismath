@@ -1,20 +1,32 @@
-import assert from "assert"
-import { add, times } from "../src/bismath"
+import assert from "assert/strict"
+import util from "util"
+import compile from "../src/compiler.js"
 
-describe("The Compiler", () => {
-  describe("has an add function()", () => {
-    it("should return 4 when adding 2 and 2 ", () => {
-      assert.deepEqual(add(2, 2), 4)
-    })
+const sampleProgram = "put(0);"
+
+describe("The compiler", () => {
+  it("throws when the output type is unknown", (done) => {
+    assert.throws(() => compile(sampleProgram, "blah"), /Unknown output type/)
+    done()
   })
-  describe("has a times function", () => {
-    it("should return 4 when multiplying 2 and 2 ", () => {
-      assert.deepEqual(times(2, 2), 4)
-    })
-    it("returns 0 when multipling by 0 ", () => {
-      assert.deepEqual(times(2, 0), 0)
-      assert.deepEqual(times(0, 98765456789), 0)
-      assert.deepEqual(times(0, 0), 0)
-    })
+  it("accepts the ast option", (done) => {
+    const compiled = compile(sampleProgram, "ast")
+    assert(util.format(compiled).startsWith("   1 | Program"))
+    done()
   })
+  it("accepts the analyzed option", (done) => {
+    const compiled = compile(sampleProgram, "analyzed")
+    assert(util.format(compiled).startsWith("   1 | Program"))
+    done()
+  })
+  // it("accepts the optimized option", (done) => {
+  //   const compiled = compile(sampleProgram, "optimized")
+  //   assert(util.format(compiled).startsWith("   1 | Program"))
+  //   done()
+  // })
+  // it("generates js code when given the js option", (done) => {
+  //   const compiled = compile(sampleProgram, "js")
+  //   assert(util.format(compiled).startsWith("console.log(0)"))
+  //   done()
+  // })
 })

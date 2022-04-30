@@ -1,1 +1,49 @@
-put "Hello, world!!!";
+//put "Hello, world!!!";
+//set x = 5;
+//set x = 6;
+//fix x = 4;
+//x = 6;
+//function test(input) {
+    //output input+2;
+    //output ;
+//}
+//set x = test(4,4);
+//set y = 3;
+//while (y > 0) {
+    //put test(y);
+    //getout;
+    //y = y - 1;
+//}
+//getout;
+//set a = <1,2,y>;
+//set matrix = [[1,2,3],[1,2,3],[1,2,3]];
+//for m in matrix {
+    //put m;
+    //output;
+//}
+//put y ? "yes" : "no";
+//set s = 0;
+//(s == 0) -> {put a;}
+//set a = 10;
+//(s == 0) -> {put "short-if testing"; set a = 2; (s > 0) -> {(s != 2) -> {put a;}}}
+//(s == 0) -> {put "test if";set r = "hello";} otherwise (s  > 0) -> { put s + 1; set r = 5;} otherwise { //put "something";}
+//set r = "what";
+//(s == 0) -> {put "test if";r = r + 1;set r = "hello";} otherwise (s  > 0) -> { put s + 1; set r = 5;}otherwise { put "something";}
+//function addThree(number, bool) {
+    //(bool) -> {
+        //output number+3;
+    //} 
+//}
+
+//set x = 1;
+//set y = "hello";
+//fix v = <1,2,3,4>;
+function x(bool) {
+    while bool {
+        (true) -> {getout;}
+    }
+}
+//function f(z) {
+//    (z != 0) -> { output z;}
+//}
+//output ;

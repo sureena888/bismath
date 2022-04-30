@@ -13,44 +13,17 @@ export class Program {
   }
 }
 
-export class Block {
-  constructor(statements) {
-    this.statements = statements
+// export class Block {
+//   constructor(statements) {
+//     this.statements = statements
+//   }
+// }
+
+export class VariableDeclaration {
+  constructor(modifier, variable, initializer) {
+    Object.assign(this, { modifier, variable, initializer })
   }
 }
-
-// export class Type {
-//   // Type of all basic type int, float, string, etc. and superclass of others
-//   static FLOAT32 = new Type("float32")
-//   static FLOAT64 = new Type("float64")
-//   static BOOL = new Type("bool")
-//   static STRING = new Type("string")
-//   constructor(description) {
-//     Object.assign(this, { description })
-//   }
-// }
-
-// export class ArrayType extends Type {
-//   // Example: [int32]
-//   constructor(baseType) {
-//     super(`[${baseType.description}]`)
-//     this.baseType = baseType
-//   }
-// }
-
-// export class MatrixType extends Type {
-//   // Example: {float64}
-//   constructor(baseType) {
-//     super(`{${baseType.description}}`)
-//     this.baseType = baseType
-//   }
-// }
-
-// export class VariableDeclaration {
-//   constructor(variable, initializer) {
-//     Object.assign(this, { variable, initializer })
-//   }
-// }
 
 export class FunctionDeclaration {
   constructor(fun, params, body) {
@@ -86,11 +59,11 @@ export class BreakStatement {
   // empty
 }
 
-export class ExpressionStatement {
-  constructor(expression) {
-    Object.assign(this, { expression })
-  }
-}
+// export class ExpressionStatement {
+//   constructor(expression) {
+//     Object.assign(this, { expression })
+//   }
+// }
 
 export class ForStatement {
   constructor(iterator, collection, body) {
@@ -154,6 +127,7 @@ export class LookupExpression {
 // Token objects are wrappers around the Nodes produced by Ohm. We use
 // them here just for simple things like numbers and identifiers. The
 // Ohm node will go in the "source" property.
+
 export class Token {
   constructor(category, source) {
     Object.assign(this, { category, source })
@@ -174,6 +148,11 @@ export class Function {
     Object.assign(this, { name, paramCount, readOnly })
   }
 }
+// export class Function {
+//   constructor(name, parameters, paramCount, readOnly) {
+//     Object.assign(this, { name, parameters, paramCount, readOnly })
+//   }
+// }
 
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),
