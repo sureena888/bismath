@@ -6,7 +6,7 @@ Welcome to the compiler for Bismath! With a goal of making math a lot easier for
 
 # Features
 
-- Statically typed
+- Dynamic
 - Variable assignments
 - If-Statements
 - Loops
@@ -17,50 +17,52 @@ Welcome to the compiler for Bismath! With a goal of making math a lot easier for
 
 # Hello World Function
 
-    equals(string "Hello", string "World")
+    put "Hello, world!!!";
 
 # Variable Assignment
 
-    integer someNumber = 10
-    float anotherNumber = -7.145
-    string someString = "Welcome to Bismath!"
+    set x = 10;
+    fix y = -7.145;
+    set example = "Welcome to Bismath!";
 
-# Basic Algebra functions
+# Basic Expressions
 
-    integer a = 2 + 4
-    integer b = 5 + (7 - 9) * (4 + 1)
-    integer c = 2 ** 5
-
-    float d = 3.32 + 9.14 * 4
-    float e = 3 ** -3
+    x = x + 3;
+    put 5 + (7 - 9) * (4 + 1) + y^8;
+    put !((x > y) && (x != 0 || y != 0));
+    put true ? x : y;
 
 # Calculate the area of a circle given a radius
 
-    integer someArea = Circle.area(integer 34)
+    function calcArea(radius) {
+        output pi*radius^2;
+    }
+    put calcArea(10);
 
-# Fibonnaci
+# If-statements
 
-# Hello World Function {
+    (x > 0) -> {
+        put "greater";
+    } otherwise (x < 0) -> {
+        put "less than";
+    } otherwise {
+        put "equals zero";
+    }
 
-# equals("Hello, World)
+# Loops, vectors, and matrices
 
-}
+    set vector = <1,2,3>;
+    set matrix = [[1,2,3], [4,5,6], [7,8,9]];
 
-# Fibonnaci
+    for row in matrix {
+        for col in row {
+            put ("row: @row, col: @col"); //parenthesis are optional for the expression
+        }
+    }
 
-# function integer fibonnaci(integer num){{
+    while x <= 3 {
+        put vector[x];
+        x = x - 1;
+    }
 
-    does num == 0?
-        make 0
-    or does num == 1 or does num ==2?
-        make 1
-    make fibonnaci(integer (num subtract 2)) add fibonnaci(integer (num subtract 1))
-
-}}
-function integer fibonnaci(integer num){{
-        does num == 0?
-            make 0
-        or does num == 1 or does num == 2?
-            make 1
-        make fibonnaci(integer (num - 2)) add fibonnaci(integer (num - 1))
-    }}
+# Why Bismath is unique? Easily multiply matrices, find the determinant of a matrix, etc. shown below
