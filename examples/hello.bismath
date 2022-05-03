@@ -38,12 +38,16 @@
 //set x = 1;
 //set y = "hello";
 //fix v = <1,2,3,4>;
-function x(bool) {
-    while bool {
-        (true) -> {getout;}
-    }
-}
-//function f(z) {
-//    (z != 0) -> { output z;}
+//function x(bool) {
+    //while bool {
+        //(true) -> {getout;}
+    //}
 //}
+function f(z) {
+    (z > 0) -> { output z;}
+}
+put f(10);
 //output ;
+//set x = 3;
+//(x > 0) -> {x = x; put x;}
+

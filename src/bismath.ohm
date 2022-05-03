@@ -1,86 +1,87 @@
 Bismath {
 
-  Program   = Statement+ 
-  Block     = "{" Statement* "}"
+  Program     = Statement+ 
+  Block       = "{" Statement* "}"
 	
-  Statement = IfStmt                                      
-            | MathStmt       
-            | Loop      
-            | Function
+  Statement   = IfStmt                                      
+              | MathStmt       
+              | Loop      
+              | Function
                        
-  MathStmt  = (set | fix) id "=" Exp ";"                     -- vardec
-            | id "=" Exp ";"                                 -- assignment
-  			    | put Exp ";"                                    -- print					
-            | output Exp? ";"                                -- return
-            | getout ";"                                     -- break     
+  MathStmt    = (set | fix) id "=" Exp ";"                     -- vardec
+              | id "=" Exp ";"                                 -- assignment
+  			      | put Exp ";"                                    -- print					
+              | output Exp? ";"                                -- return
+              | getout ";"                                     -- break     
        
-  Exp       = ("-" | "!") Exp7                               -- unary
-            | Exp1 "?" Exp1 ":" Exp                          -- ternary
-            | Exp1       
-  Exp1      = Exp1 "||" Exp2                                 -- binary
-            | Exp2       
-  Exp2      = Exp2 "&&" Exp3                                 -- binary
-            | Exp3       
-  Exp3      = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4        -- binary
-            | Exp4
-  Exp4      = Exp4 ("+" | "-") Exp5                          -- binary
-            | Exp5       
-  Exp5      = Exp5 ("*" | "/" | "%") Exp6                    -- binary
-            | Exp6       
-  Exp6      = Exp7 "^" Exp6                                  -- binary
-            | Exp7       
-  Exp7      = num       
-            | true       
-            | false       
-            | strlit
-            | Lookup
-            | Call
-            | id
-            | Matrix
-            | Vector
-            | "(" Exp ")"                                    -- parens
+  Exp         = ("-" | "!") Exp7                               -- unary
+              | Exp1 "?" Exp1 ":" Exp                          -- ternary
+              | Exp1       
+  Exp1        = Exp1 "||" Exp2                                 -- binary
+              | Exp2       
+  Exp2        = Exp2 "&&" Exp3                                 -- binary
+              | Exp3       
+  Exp3        = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4        -- binary
+              | Exp4
+  Exp4        = Exp4 ("+" | "-") Exp5                          -- binary
+              | Exp5       
+  Exp5        = Exp5 ("*" | "/" | "%") Exp6                    -- binary
+              | Exp6       
+  Exp6        = Exp7 "^" Exp6                                  -- binary
+              | Exp7       
+  Exp7        = num       
+              | true       
+              | false       
+              | strlit
+              | Lookup
+              | Call
+              | id
+              | Matrix
+              | Vector
+              | "(" Exp ")"                                    -- parens
          
 
-  Loop      = for id in Exp Block                            -- for
-            | while Exp Block                                -- while
+  Loop        = for id in Exp Block                            -- for
+              | while Exp Block                                -- while
              
-  IfStmt    = "(" Exp ")" "->" Block otherwise (Block | IfStmt)   -- long
-            | "(" Exp ")" "->" Block                              -- short
+  IfStmt      = "(" Exp ")" "->" Block otherwise (Block | IfStmt)   -- long
+              | "(" Exp ")" "->" Block                              -- short
   
-  Function  = function id "(" Params ")" Block
+  Function    = function id "(" Params ")" Block
 
-  Call      = id "(" Args ")"
-  Params    = ListOf<id, ",">
-  Args      = ListOf<Exp, ",">
+  Call        = id "(" Args ")"
+  Params      = ListOf<id, ",">
+  Args        = ListOf<Exp, ",">
 
-  Matrix    = "[" ListOf<Exp, ","> "]"
-  Vector    =  "<" ListOf<(num | id), ","> ">"
-  Lookup    = Exp7 "[" Exp "]"
+  Matrix      = "[" ListOf<Exp, ","> "]"
+  Vector      =  "<" ListOf<(num | id), ","> ">"
+  Lookup      = Exp7 "[" Exp "]"
   
-  strlit    = "\"" char* "\""
-  char      = ~control ~"\\" ~"\"" any
-            | "\\" ("n" | "t" | "\"" | "\\")                --escape
-            | "\\u{" hex hex? hex? hex? hex? hex? "}"       --codepoint
-  control   = "\x00".."\x1f" | "\x80".."\x9f"
-  hex       = hexDigit
+  strlit      = "\"" (interpolate | char)* "\""
+  char        = ~control ~"\\" ~"\"" any
+              | "\\" ("n" | "t" | "\"" | "\\")                --escape
+              | "\\u{" hex hex? hex? hex? hex? hex? "}"       --codepoint
+  control     = "\x00".."\x1f" | "\x80".."\x9f"
+  hex         = hexDigit
+  interpolate = "@(" id ")"
 
-  in     	  = "in"  ~idchar
-  set       = "set" ~idchar
-  fix       = "fix" ~idchar
-  function  = "function" ~idchar
-  for 	  	= "for" ~ idchar
-  while     = "while" ~idchar
-  true      = "true" ~idchar
-  false     = "false" ~idchar
-  put       = "put" ~idchar
-  getout    = "getout" ~idchar
-  otherwise = "otherwise" ~idchar
-  output    = "output" ~idchar
-  keyword   = function | while | true | false | put | getout | otherwise 
-            | output | for | in | set | fix
-  num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
-  id        = ~keyword letter idchar*
-  idchar    = letter | digit | "_"
-  space     += "//" (~"\n" any)* ("\n" | end)                -- comment
-  newline   = "\n"+
+  in     	    = "in"  ~idchar
+  set         = "set" ~idchar
+  fix         = "fix" ~idchar
+  function    = "function" ~idchar
+  for 	  	  = "for" ~ idchar
+  while       = "while" ~idchar
+  true        = "true" ~idchar
+  false       = "false" ~idchar
+  put         = "put" ~idchar
+  getout      = "getout" ~idchar
+  otherwise   = "otherwise" ~idchar
+  output      = "output" ~idchar
+  keyword     = function | while | true | false | put | getout | otherwise 
+              | output | for | in | set | fix
+  num         = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  id          = ~keyword letter idchar*
+  idchar      = letter | digit | "_"
+  space       += "//" (~"\n" any)* ("\n" | end)                -- comment
+  newline     = "\n"+
 }
