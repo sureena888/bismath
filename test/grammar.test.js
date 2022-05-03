@@ -3,6 +3,7 @@ import assert from "assert/strict"
 // import ohm from "ohm-js"
 import ast from "../src/ast.js"
 
+// prettier-ignore
 const syntaxChecks = [
   ["all numeric literal forms", "put 8 * 89.123;"],
   ["complex expressions", "put(83 * ((((-((((13 / 21)))))))) + 1 - 0);"],
