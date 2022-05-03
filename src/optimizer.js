@@ -60,6 +60,10 @@ const optimizers = {
     }
     return s
   },
+  ReturnStatement(s) {
+    s.argument = s.argument.length === 0 ? null : optimize(s.argument[0])
+    return s
+  },
   Assignment(s) {
     s.source = optimize(s.source)
     s.target = optimize(s.target)

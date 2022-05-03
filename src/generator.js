@@ -48,63 +48,39 @@ export default function generate(program) {
     Program(p) {
       gen(p.statements)
     },
-    //   VariableDeclaration(d) {
-    //     // We don't care about const vs. let in the generated code! The analyzer has
-    //     // already checked that we never updated a const, so let is always fine.
-    //     output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`)
-    //   },
-    //   TypeDeclaration(d) {
-    //     // The only type declaration in Carlos is the struct! Becomes a JS class.
-    //     output.push(`class ${gen(d.type)} {`)
-    //     output.push(`constructor(${gen(d.type.fields).join(",")}) {`)
-    //     for (let field of d.type.fields) {
-    //       output.push(`this[${JSON.stringify(gen(field))}] = ${gen(field)};`)
-    //     }
-    //     output.push("}")
-    //     output.push("}")
-    //   },
-    //   StructType(t) {
-    //     return targetName(t)
-    //   },
-    //   Field(f) {
-    //     return targetName(f)
-    //   },
-    //   FunctionDeclaration(d) {
-    //     output.push(`function ${gen(d.fun)}(${gen(d.fun.parameters).join(", ")}) {`)
-    //     gen(d.body)
-    //     output.push("}")
-    //   },
-    //   Parameter(p) {
-    //     return targetName(p)
-    //   },
-    //   Variable(v) {
-    //     // Standard library constants just get special treatment
-    //     if (v === standardLibrary.contents.π) {
-    //       return "Math.PI"
-    //     }
-    //     return targetName(v)
-    //   },
-    //   Function(f) {
-    //     return targetName(f)
-    //   },
-    //   Increment(s) {
-    //     output.push(`${gen(s.variable)}++;`)
-    //   },
-    //   Decrement(s) {
-    //     output.push(`${gen(s.variable)}--;`)
-    //   },
+    VariableDeclaration(d) {
+      // We don't care about const vs. let in the generated code! The analyzer has
+      // already checked that we never updated a const, so let is always fine.
+      output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`)
+    },
+    FunctionDeclaration(d) {
+      output.push(`function ${gen(d.fun)}(${gen(d.params).join(", ")}) {`)
+      gen(d.body)
+      output.push("}")
+    },
+    Parameter(p) {
+      return targetName(p)
+    },
+    Variable(v) {
+      // Standard library constants just get special treatment
+      // if (v === standardLibrary.contents.π) {
+      //   return "Math.PI"
+      // }
+      return targetName(v)
+    },
+    Function(f) {
+      return targetName(f)
+    },
     //   Assignment(s) {
     //     output.push(`${gen(s.target)} = ${gen(s.source)};`)
     //   },
     //   BreakStatement(s) {
     //     output.push("break;")
     //   },
-    //   ReturnStatement(s) {
-    //     output.push(`return ${gen(s.expression)};`)
-    //   },
-    //   ShortReturnStatement(s) {
-    //     output.push("return;")
-    //   },
+    ReturnStatement(s) {
+      const returnValue = s.argument === null ? "" : gen(s.argument)
+      output.push(`return ${returnValue};`)
+    },
     PrintStatement(s) {
       output.push(`console.log(${gen(s.argument)});`)
     },
@@ -130,20 +106,6 @@ export default function generate(program) {
     //     gen(s.body)
     //     output.push("}")
     //   },
-    //   RepeatStatement(s) {
-    //     // JS can only repeat n times if you give it a counter variable!
-    //     const i = targetName({ name: "i" })
-    //     output.push(`for (let ${i} = 0; ${i} < ${gen(s.count)}; ${i}++) {`)
-    //     gen(s.body)
-    //     output.push("}")
-    //   },
-    //   ForRangeStatement(s) {
-    //     const i = targetName(s.iterator)
-    //     const op = s.op === "..." ? "<=" : "<"
-    //     output.push(`for (let ${i} = ${gen(s.low)}; ${i} ${op} ${gen(s.high)}; ${i}++) {`)
-    //     gen(s.body)
-    //     output.push("}")
-    //   },
     //   ForStatement(s) {
     //     output.push(`for (let ${gen(s.iterator)} of ${gen(s.collection)}) {`)
     //     gen(s.body)
@@ -158,9 +120,6 @@ export default function generate(program) {
     //   },
     //   UnaryExpression(e) {
     //     return `${e.op}(${gen(e.operand)})`
-    //   },
-    //   EmptyOptional(e) {
-    //     return "undefined"
     //   },
     //   SubscriptExpression(e) {
     //     return `${gen(e.array)}[${gen(e.index)}]`
