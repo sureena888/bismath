@@ -114,19 +114,22 @@ export default function generate(program) {
     //   Conditional(e) {
     //     return `((${gen(e.test)}) ? (${gen(e.consequent)}) : (${gen(e.alternate)}))`
     //   },
-    //   BinaryExpression(e) {
-    //     const op = { "==": "===", "!=": "!==" }[e.op] ?? e.op
-    //     return `(${gen(e.left)} ${op} ${gen(e.right)})`
-    //   },
+    BinaryExpression(e) {
+      const ops = {
+        "+": "__plus",
+        "*": "__times",
+      }
+      return `${ops[e.op]}(${gen(e.left)},${gen(e.right)})`
+    },
     //   UnaryExpression(e) {
     //     return `${e.op}(${gen(e.operand)})`
     //   },
     //   SubscriptExpression(e) {
     //     return `${gen(e.array)}[${gen(e.index)}]`
     //   },
-    //   ArrayExpression(e) {
-    //     return `[${gen(e.elements).join(",")}]`
-    //   },
+    MatrixExpression(e) {
+      return `[${gen(e.elements).join(",")}]`
+    },
     //   EmptyArray(e) {
     //     return "[]"
     //   },
