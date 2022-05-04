@@ -42,7 +42,7 @@ const semanticChecks = [
      set x = addThree(10);
      put x;`,
   ],
-  ["vector lookup", "set v = <2,3,4,5,6>; put v[2] == 4;"],
+  ["matrix lookup", "set m = [2,3,4,5,6]; put m[2] == 4;"],
   ["built-in constants", "put(25.0 * π);"],
   ["built-in sin", "put(sin(π));"],
   ["built-in cos", "put(cos(93.999));"],

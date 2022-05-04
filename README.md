@@ -51,18 +51,21 @@ Welcome to the compiler for Bismath! With a goal of making math a lot easier for
 
 # Loops, vectors, and matrices
 
-    set vector = <1,2,3>;
     set matrix = [[1,2,3], [4,5,6], [7,8,9]];
 
     for row in matrix {
         for col in row {
-            put ("row: @row, col: @col"); //parenthesis are optional for the expression
+            put ("row: @(row), col: @(col)"); //parenthesis are optional for the expression
         }
     }
 
-    while x <= 3 {
-        put vector[x];
-        x = x - 1;
-    }
-
 # Why Bismath is unique? Easily multiply matrices, find the determinant of a matrix, etc. shown below
+
+# Matrix operations built-in
+
+    set m = [[1,2], [3,4]]; // 2x2 matrix
+    set n = [[5], [6]]; // 2x1 matrix
+    set 0 = [[7], [8]]; // 2x1 matrix
+
+    set multiplication = m*n; // result is a 2x1 matrix
+    set addition = n+0; // result is a 2x1 matrix

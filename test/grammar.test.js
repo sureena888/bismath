@@ -3,7 +3,6 @@ import assert from "assert/strict"
 // import ohm from "ohm-js"
 import ast from "../src/ast.js"
 
-// prettier-ignore
 const syntaxChecks = [
   ["all numeric literal forms", "put 8 * 89.123;"],
   ["complex expressions", "put(83 * ((((-((((13 / 21)))))))) + 1 - 0);"],
@@ -16,11 +15,8 @@ const syntaxChecks = [
   ["end of program inside comment", "put(0); // yay"],
   ["comments with no text are ok", "put(1);//\nput(0);//"],
   ["conditional statement", "(x != 0) -> { x = x-1;} otherwise { put x + 2;}"],
-  ["Loops", "for val in vector {put val;}"],
-  [
-    "matrix and vector lookups",
-    "put matrix[3][4]; output f(argument)[1][2]; output <1,2,3,4,5>[2];",
-  ],
+  ["Loops", "for row in matrix {put row;}"],
+  ["matrix and vector lookups", "put matrix[3][4]; output f(argument)[1][2]"],
 ]
 
 const syntaxErrors = [
@@ -35,22 +31,6 @@ const syntaxErrors = [
   ["a statement starting with a )", "put(5);\n) * 5", /Line 2, col 1/],
   ["an expression starting with a *", "x = * 71;", /Line 1, col 5/],
 ]
-
-// describe("The grammar", () => {
-//   const grammar = ohm.grammar(fs.readFileSync("grammar/bismath.ohm"))
-//   for (const [scenario, source] of syntaxChecks) {
-//     it(`properly specifies ${scenario}`, () => {
-//       assert(grammar.match(source).succeeded())
-//     })
-//   }
-//     for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
-//       it(`does not permit ${scenario}`, () => {
-//         const match = grammar.match(source)
-//         assert(!match.succeeded())
-//         assert(new RegExp(errorMessagePattern).test(match.message))
-//       })
-//     }
-// })
 
 describe("The parser", () => {
   for (const [scenario, source] of syntaxChecks) {

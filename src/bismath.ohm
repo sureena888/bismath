@@ -37,7 +37,6 @@ Bismath {
               | Call
               | id
               | Matrix
-              | Vector
               | "(" Exp ")"                                    -- parens
          
 
@@ -54,7 +53,6 @@ Bismath {
   Args        = ListOf<Exp, ",">
 
   Matrix      = "[" ListOf<Exp, ","> "]"
-  Vector      =  "<" ListOf<(num | id), ","> ">"
   Lookup      = Exp7 "[" Exp "]"
   
   strlit      = "\"" (interpolate | char)* "\""

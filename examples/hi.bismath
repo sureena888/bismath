@@ -1,2 +1,13 @@
-set x = [1,2,3];
-put x+x;
+set x = 5;
+set y = 5;
+put x+y;
+set m = [[1,2], [3,4], [5,6]];
+set a = [[3,3,3],[4,4,4]];
+put m*a;
+set c = [2,3,4,5];
+set d = 6;
+put c*d;
+set e = [1,1,1,1];
+set f = [2,2,2,2];
+put e+f;
+put e-f;

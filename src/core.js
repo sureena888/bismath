@@ -13,12 +13,6 @@ export class Program {
   }
 }
 
-// export class Block {
-//   constructor(statements) {
-//     this.statements = statements
-//   }
-// }
-
 export class VariableDeclaration {
   constructor(modifier, variable, initializer) {
     Object.assign(this, { modifier, variable, initializer })
@@ -58,12 +52,6 @@ export class ReturnStatement {
 export class BreakStatement {
   // empty
 }
-
-// export class ExpressionStatement {
-//   constructor(expression) {
-//     Object.assign(this, { expression })
-//   }
-// }
 
 export class ForStatement {
   constructor(iterator, collection, body) {
@@ -113,12 +101,6 @@ export class MatrixExpression {
   }
 }
 
-export class VectorExpression {
-  constructor(elements) {
-    this.elements = elements
-  }
-}
-
 export class LookupExpression {
   constructor(collection, index) {
     Object.assign(this, { collection, index })
@@ -148,11 +130,6 @@ export class Function {
     Object.assign(this, { name, paramCount, readOnly })
   }
 }
-// export class Function {
-//   constructor(name, parameters, paramCount, readOnly) {
-//     Object.assign(this, { name, parameters, paramCount, readOnly })
-//   }
-// }
 
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),

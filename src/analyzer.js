@@ -155,9 +155,6 @@ class Context {
   UnaryExpression(e) {
     this.analyze(e.operand)
   }
-  VectorExpression(e) {
-    this.analyze(e.elements)
-  }
   MatrixExpression(e) {
     this.analyze(e.elements)
   }

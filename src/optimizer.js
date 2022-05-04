@@ -168,10 +168,6 @@ const optimizers = {
     e.elements = optimize(e.elements)
     return e
   },
-  VectorExpressions(e) {
-    e.elements = optimize(e.elements)
-    return e
-  },
   LookupExpressions(e) {
     e.collection = optimize(e.collection)
     e.index = optimize(e.index)

@@ -1,4 +1,4 @@
-// CODE GENERATOR: Carlos -> JavaScript
+// CODE GENERATOR: Bismath -> JavaScript
 //
 // Invoke generate(program) with the program node to get back the JavaScript
 // translation as a string.
@@ -6,8 +6,446 @@
 import { IfStatement, standardLibrary } from "./core.js"
 // import stdlib from "./core.js"
 
+function isMatrix(m) {
+  if (m.length !== 0) return Array.isArray(m[0])
+}
+function checkColumns(m) {
+  m.forEach((row, idx) => {
+    if (idx + 1 !== m.length) {
+      if (row.length !== m[idx + 1].length) throw new Error("Column dimension error")
+    }
+  })
+}
+function getMatrixDims(m) {
+  return [m.length, m[0].length] //rows, cols
+}
+
+function getColumns(b) {
+  bCols = []
+  for (let col = 0; col < b[0].length; col++) {
+    let bColumn = []
+    for (let row = 0; row < b.length; row++) {
+      bColumn.push(b[row][col])
+    }
+    bCols.push(bColumn)
+  }
+  return bCols
+}
+
+function sum(array) {
+  return array.reduce((a, b) => a + b, 0)
+}
+
+function __plus(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a + b
+  } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    if (isMatrix(a) && isMatrix(b)) {
+      checkColumns(a)
+      checkColumns(b)
+      const [aRows, aCols] = getMatrixDims(a)
+      const [bRows, bCols] = getMatrixDims(b)
+      if (aRows === bRows && aCols === bCols) {
+        return a.map((row, idx) => row.map((col, i) => col + b[idx][i]))
+      } else {
+        throw new Error("The dimensions of the matrices must match")
+      }
+    }
+
+    return a.map((x, i) => x + b[i])
+  }
+}
+
+function __minus(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a - b
+  } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    if (isMatrix(a) && isMatrix(b)) {
+      checkColumns(a)
+      checkColumns(b)
+      const [aRows, aCols] = getMatrixDims(a)
+      const [bRows, bCols] = getMatrixDims(b)
+      if (aRows === bRows && aCols === bCols) {
+        return a.map((row, idx) => row.map((col, i) => col - b[idx][i]))
+      } else {
+        throw new Error("The dimensions of the matrices must match")
+      }
+    }
+
+    return a.map((x, i) => x - b[i])
+  }
+}
+
+function __times(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a * b
+  } else if (isMatrix(a) && isMatrix(b)) {
+    checkColumns(a)
+    checkColumns(b)
+    const [aRows, aCols] = getMatrixDims(a)
+    const [bRows, bCols] = getMatrixDims(b)
+    if (aCols === bRows) {
+      let bColumns = getColumns(b)
+      let result = []
+      for (let row = 0; row < a.length; row++) {
+        newRow = []
+        for (let col = 0; col < bColumns.length; col++) {
+          products = []
+          for (let i = 0; i < a[row].length; i++) {
+            products.push(a[row][i] * bColumns[col][i])
+          }
+          newRow.push(sum(products))
+        }
+        result.push(newRow)
+      }
+      return result
+    } else {
+      throw new Error("Error: unable to apply these matrices b/c of their dimensions")
+    }
+  } else if (Array.isArray(a) && typeof b === "number") {
+    if (isMatrix(a)) {
+      checkColumns(a)
+      return a.map((row) => row.map((col) => col * b))
+    } else {
+      return a.map((value) => value * b)
+    }
+  } else if (typeof a === "number" && Array.isArray(b)) {
+    if (isMatrix(b)) {
+      checkColumns(b)
+      return b.map((row) => row.map((col) => col * a))
+    } else {
+      return b.map((value) => value * a)
+    }
+  } else {
+    throw new Error("Error. Replace with a descriptive message.")
+  }
+}
+
+function __divide(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a / b
+  } else {
+    throw new Error("Can only divide numbers")
+  }
+}
+
+function __equal(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a === b
+  } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    if (isMatrix(a) && isMatrix(b)) {
+      checkColumns(a)
+      checkColumns(b)
+      const [aRows, aCols] = getMatrixDims(a)
+      const [bRows, bCols] = getMatrixDims(b)
+      if (aRows === bRows && aCols === bCols) {
+        a.forEach((row, idx) =>
+          row.forEach((col, i) => {
+            if (col !== b[idx][i]) return false
+          })
+        )
+        return true
+      }
+    } else {
+      a.forEach((value, i) => {
+        if (value !== b[i]) return false
+      })
+      return true
+    }
+  }
+  return false
+}
+
+function __notEqual(a, b) {
+  let equal = __equal(a, b)
+  return !equal
+}
+
+function __and(a, b) {
+  if (typeof a === "boolean" && typeof b === "boolean") {
+    return a && b
+  } else {
+    throw new Error("Error: && only works with booleans")
+  }
+}
+
+function __or(a, b) {
+  if (typeof a === "boolean" && typeof b === "boolean") {
+    return a && b
+  } else {
+    throw new Error("Error: || only works with booleans")
+  }
+}
+
+function __exponentiation(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a ** b
+  } else {
+    throw new Error("Error: ^ only works with numbers")
+  }
+}
+
+function __modulus(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a % b
+  } else {
+    throw new Error("Error: % only works with numbers")
+  }
+}
+
+function __lessThan(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a < b
+  } else {
+    throw new Error("Error: < only works with numbers")
+  }
+}
+
+function __greaterThan(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a > b
+  } else {
+    throw new Error("Error: > only works with numbers")
+  }
+}
+
+function __lessOrEqual(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a <= b
+  } else {
+    throw new Error("Error: <= only works with numbers")
+  }
+}
+
+function __greaterOrEqual(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a >= b
+  } else {
+    throw new Error("Error: >= only works with numbers")
+  }
+}
+
 export default function generate(program) {
-  const output = []
+  const output = [
+    `function isMatrix(m) {
+  if (m.length !== 0) return Array.isArray(m[0])
+}
+function checkColumns(m) {
+  m.forEach((row, idx) => {
+    if (idx + 1 !== m.length) {
+      if (row.length !== m[idx + 1].length) throw new Error("Column dimension error")
+    }
+  })
+}
+function getMatrixDims(m) {
+  return [m.length, m[0].length] //rows, cols
+}
+
+function getColumns(b) {
+  bCols = []
+  for (let col = 0; col < b[0].length; col++) {
+    let bColumn = []
+    for (let row = 0; row < b.length; row++) {
+      bColumn.push(b[row][col])
+    }
+    bCols.push(bColumn)
+  }
+  return bCols
+}
+
+function sum(array) {
+  return array.reduce((a, b) => a + b, 0)
+}
+
+function __plus(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a + b
+  } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    if (isMatrix(a) && isMatrix(b)) {
+      checkColumns(a)
+      checkColumns(b)
+      const [aRows, aCols] = getMatrixDims(a)
+      const [bRows, bCols] = getMatrixDims(b)
+      if (aRows === bRows && aCols === bCols) {
+        return a.map((row, idx) => row.map((col, i) => col + b[idx][i]))
+      } else {
+        throw new Error("The dimensions of the matrices must match")
+      }
+    }
+
+    return a.map((x, i) => x + b[i])
+  }
+}
+
+function __minus(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a - b
+  } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    if (isMatrix(a) && isMatrix(b)) {
+      checkColumns(a)
+      checkColumns(b)
+      const [aRows, aCols] = getMatrixDims(a)
+      const [bRows, bCols] = getMatrixDims(b)
+      if (aRows === bRows && aCols === bCols) {
+        return a.map((row, idx) => row.map((col, i) => col - b[idx][i]))
+      } else {
+        throw new Error("The dimensions of the matrices must match")
+      }
+    }
+
+    return a.map((x, i) => x - b[i])
+  }
+}
+
+function __times(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a * b
+  } else if (isMatrix(a) && isMatrix(b)) {
+    checkColumns(a)
+    checkColumns(b)
+    const [aRows, aCols] = getMatrixDims(a)
+    const [bRows, bCols] = getMatrixDims(b)
+    if (aCols === bRows) {
+      let bColumns = getColumns(b)
+      let result = []
+      for (let row = 0; row < a.length; row++) {
+        newRow = []
+        for (let col = 0; col < bColumns.length; col++) {
+          products = []
+          for (let i = 0; i < a[row].length; i++) {
+            products.push(a[row][i] * bColumns[col][i])
+          }
+          newRow.push(sum(products))
+        }
+        result.push(newRow)
+      }
+      return result
+    } else {
+      throw new Error("Error: unable to apply these matrices b/c of their dimensions")
+    }
+  } else if (Array.isArray(a) && typeof b === "number") {
+    if (isMatrix(a)) {
+      checkColumns(a)
+      return a.map((row) => row.map((col) => col * b))
+    } else {
+      return a.map((value) => value * b)
+    }
+  } else if (typeof a === "number" && Array.isArray(b)) {
+    if (isMatrix(b)) {
+      checkColumns(b)
+      return b.map((row) => row.map((col) => col * a))
+    } else {
+      return b.map((value) => value * a)
+    }
+  } else {
+    throw new Error("Error. Replace with a descriptive message.")
+  }
+}
+
+function __divide(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a / b
+  } else {
+    throw new Error("Can only divide numbers")
+  }
+}
+
+function __equal(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a === b
+  } else if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    if (isMatrix(a) && isMatrix(b)) {
+      checkColumns(a)
+      checkColumns(b)
+      const [aRows, aCols] = getMatrixDims(a)
+      const [bRows, bCols] = getMatrixDims(b)
+      if (aRows === bRows && aCols === bCols) {
+        a.forEach((row, idx) =>
+          row.forEach((col, i) => {
+            if (col !== b[idx][i]) return false
+          })
+        )
+        return true
+      }
+    } else {
+      a.forEach((value, i) => {
+        if (value !== b[i]) return false
+      })
+      return true
+    }
+  }
+  return false
+}
+
+function __notEqual(a, b) {
+  let equal = __equal(a, b)
+  return !equal
+}
+
+function __and(a, b) {
+  if (typeof a === "boolean" && typeof b === "boolean") {
+    return a && b
+  } else {
+    throw new Error("Error: && only works with booleans")
+  }
+}
+
+function __or(a, b) {
+  if (typeof a === "boolean" && typeof b === "boolean") {
+    return a && b
+  } else {
+    throw new Error("Error: || only works with booleans")
+  }
+}
+
+function __exponentiation(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a ** b
+  } else {
+    throw new Error("Error: ^ only works with numbers")
+  }
+}
+
+function __modulus(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a % b
+  } else {
+    throw new Error("Error: % only works with numbers")
+  }
+}
+
+function __lessThan(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a < b
+  } else {
+    throw new Error("Error: < only works with numbers")
+  }
+}
+
+function __greaterThan(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a > b
+  } else {
+    throw new Error("Error: > only works with numbers")
+  }
+}
+
+function __lessOrEqual(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a <= b
+  } else {
+    throw new Error("Error: <= only works with numbers")
+  }
+}
+
+function __greaterOrEqual(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a >= b
+  } else {
+    throw new Error("Error: >= only works with numbers")
+  }
+}`,
+  ]
 
   // const standardFunctions = new Map([
   //   [standardLibrary.contents.print, (x) => `console.log(${x})`],
@@ -58,9 +496,9 @@ export default function generate(program) {
       gen(d.body)
       output.push("}")
     },
-    Parameter(p) {
-      return targetName(p)
-    },
+    // Parameter(p) {
+    //   return targetName(p)
+    // },
     Variable(v) {
       // Standard library constants just get special treatment
       // if (v === standardLibrary.contents.π) {
@@ -117,8 +555,21 @@ export default function generate(program) {
     BinaryExpression(e) {
       const ops = {
         "+": "__plus",
+        "-": "__minus",
         "*": "__times",
+        "/": "__divide",
+        "%": "__modulus",
+        "&&": "__and",
+        "||": "__or",
+        "<": "__lessThan",
+        ">": "__greaterThan",
+        "<=": "__lessOrEqual",
+        ">=": "__greaterOrEqual",
+        "!=": "__notEqual",
+        "==": "__equal",
+        "^": "__exponentiation",
       }
+
       return `${ops[e.op]}(${gen(e.left)},${gen(e.right)})`
     },
     //   UnaryExpression(e) {
